@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\BaseUrl;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Producto */
@@ -24,16 +25,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'nombre',
-            'precio',
-            'imagen',
-            'descripción',
-        ],
-    ]) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="<?= BaseUrl::base().'/'.$model->imagen ?>" class="img-responsive" width="300px" alt="prueba"/>
+        </div>
+        <div class="col-md-6">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    //'id',
+                    'nombre',
+                    'precio',
+                    'imagen',
+                    'descripcion',
+                ],
+            ]) ?>
+        </div>
+    </div>
 
 </div>
