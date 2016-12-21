@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ProductoController implements the CRUD actions for Producto model.
@@ -66,8 +67,10 @@ class ProductoController extends Controller
         $model = new Producto();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imagen = $model->upload();
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->imagen = $model->URLImage();
             if($model->save()){
+                $model->upload();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
             
