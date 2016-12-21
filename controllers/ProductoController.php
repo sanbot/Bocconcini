@@ -70,7 +70,7 @@ class ProductoController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->imagen = $model->URLImage();
             if($model->save()){
-                $model->upload();
+                $model->upload($model->id);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
             
