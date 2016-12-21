@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "tblproducto".
@@ -15,6 +16,7 @@ use Yii;
  */
 class Producto extends \yii\db\ActiveRecord
 {
+    public $imageFile;
     /**
      * @inheritdoc
      */
@@ -33,6 +35,7 @@ class Producto extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 100],
             [['imagen'], 'string', 'max' => 150],
             [['descripcion'], 'string', 'max' => 200],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -48,5 +51,16 @@ class Producto extends \yii\db\ActiveRecord
             'imagen' => 'Imagen',
             'descripcion' => 'Descripción',
         ];
+    }
+    
+    public function upload()
+    {
+        $this->imageFile->saveAs('uploads/'.$this->imageFile->baseName . '.' . $this->imageFile->extension);
+        return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+    }
+    public function URLImage()
+    {
+        
+        return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
     }
 }
