@@ -53,14 +53,14 @@ class Producto extends \yii\db\ActiveRecord
         ];
     }
     
-    public function upload()
+    public function upload($name)
     {
-        $this->imageFile->saveAs('uploads/'.$this->imageFile->baseName . '.' . $this->imageFile->extension);
+        $this->imageFile->saveAs('uploads/products/'.$name. '.' . $this->imageFile->extension);
         return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
     }
     public function URLImage()
     {
         
-        return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+        return $this->imageFile->extension;
     }
 }

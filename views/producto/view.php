@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <div class="row">
         <div class="col-md-6">
-            <img src="<?= BaseUrl::base().'/'.$model->imagen ?>" class="img-responsive" width="300px" alt="prueba"/>
+            <img src="<?= BaseUrl::base().'/uploads/products/'.$model->id.'.'.$model->imagen ?>" class="img-responsive" width="300px" alt="prueba"/>
         </div>
         <div class="col-md-6">
             <?= DetailView::widget([
@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'imagen',
                     'descripcion',
                 ],
+                'template' => '<div class="row"><div class="col-md-4"><p style="text-align:right;">{label}</p></div><div class="col-md-8"><p>{value}</div></div>'
             ]) ?>
         </div>
     </div>
