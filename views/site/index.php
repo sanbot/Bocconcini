@@ -1,18 +1,24 @@
 <?php
-
 /* @var $this yii\web\View */
-
+use yii\helpers\BaseUrl;
+use yii\bootstrap\Carousel;
 $this->title = 'Bocconcini';
 ?>
 <div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Bocconcini Sorpresas!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+    <div class="row">
+        <div class="col-md-12">
+            <?= Carousel::widget([
+                'items' => [
+                    [
+                        'content' => '<img src="'. BaseUrl::base().'/uploads/page/banner1.png" width="100%"/>',
+                        //'caption' => '<h4>Bocconcini Sorpresa</h4><p>Los mejores detalles para ocasiones especiales.</p>',
+                        //'options' => [...],
+                    ],
+                ]
+            ]);?>
+        </div>
     </div>
+    
 
     <div class="body-content">
 
