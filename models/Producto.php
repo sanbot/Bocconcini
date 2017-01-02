@@ -14,22 +14,21 @@ use yii\web\UploadedFile;
  * @property string $imagen
  * @property string $descripcion
  */
-class Producto extends \yii\db\ActiveRecord
-{
+class Producto extends \yii\db\ActiveRecord {
+
     public $imageFile;
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'tblproducto';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['precio'], 'number'],
             [['nombre'], 'string', 'max' => 100],
@@ -42,8 +41,7 @@ class Producto extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'Id',
             'nombre' => 'Nombre Producto',
@@ -52,15 +50,15 @@ class Producto extends \yii\db\ActiveRecord
             'descripcion' => 'Descripción',
         ];
     }
-    
-    public function upload($name)
-    {
-        $this->imageFile->saveAs('uploads/products/'.$name. '.' . $this->imageFile->extension);
+
+    public function upload($name) {
+        $this->imageFile->saveAs('uploads/products/' . $name . '.' . $this->imageFile->extension);
         return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
     }
-    public function URLImage()
-    {
-        
+
+    public function URLImage() {
+
         return $this->imageFile->extension;
     }
+
 }
