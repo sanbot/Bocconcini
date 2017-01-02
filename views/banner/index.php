@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'extension',
-            'location',
+            'bannerlocation.location',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

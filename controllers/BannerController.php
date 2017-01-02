@@ -35,8 +35,11 @@ class BannerController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+        $query = Banner::find();
+        $query->joinWith(['bannerlocation']);
+        
         $dataProvider = new ActiveDataProvider([
-            'query' => Banner::find(),
+            'query' => $query,
         ]);
 
         return $this->render('index', [

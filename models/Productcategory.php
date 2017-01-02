@@ -15,6 +15,7 @@ use Yii;
  */
 class Productcategory extends \yii\db\ActiveRecord
 {
+    public $main;
     /**
      * @inheritdoc
      */
@@ -32,6 +33,7 @@ class Productcategory extends \yii\db\ActiveRecord
             [['name', 'maincategory'], 'required'],
             [['maincategory'], 'integer'],
             [['name'], 'string', 'max' => 150],
+            [['main'], 'safe']
         ];
     }
 
@@ -52,6 +54,14 @@ class Productcategory extends \yii\db\ActiveRecord
      */
     public function getTblproduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'id']);
+        return $this->hasOne(Product::className(), ['id' => 'category']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductcategory()
+    {
+        return $this->hasOne(Productcategory::className(), ['id' => 'maincategory']);
     }
 }

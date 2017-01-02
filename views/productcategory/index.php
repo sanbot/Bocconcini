@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $PT;
 
             'id',
             'name',
-            'maincategory',
+            'main',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

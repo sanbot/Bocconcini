@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $PT;
             'price',
             //'imagen',
             //'description',
-            // 'category',
+            'productcategory.name',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

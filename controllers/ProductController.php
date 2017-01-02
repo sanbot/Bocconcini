@@ -35,8 +35,11 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+        $query = Product::find();
+        $query->joinWith(['productcategory']);
+        
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find(),
+            'query' => $query,
         ]);
 
         return $this->render('index', [

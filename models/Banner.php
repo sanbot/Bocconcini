@@ -52,7 +52,7 @@ class Banner extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getBannerlocation() {
-        return $this->hasOne(Bannerlocation::className(), ['id' => 'id']);
+        return $this->hasOne(Bannerlocation::className(), ['id' => 'location']);
     }
 
     public function upload($name) {

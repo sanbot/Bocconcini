@@ -62,7 +62,7 @@ class Product extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getProductcategory() {
-        return $this->hasOne(Productcategory::className(), ['id' => 'id']);
+        return $this->hasOne(Productcategory::className(), ['id' => 'category']);
     }
 
     public function upload($name) {
