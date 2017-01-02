@@ -113,3 +113,27 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.navbar-bocconcini{
+    background-color: #590B2D;
+    border-color: #590B2D;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
+    color: #ffffff;
+    background-color: #5A1231;
+}
+
+.navbar-inverse .navbar-nav > li> a:hover,  .navbar-inverse .dropdown-menu > li> a:hover{
+    color: #ffffff;
+    background-color: #5A1231;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: #5A1231;
+    color: #ffffff;
+}
+
+.navbar-inverse .dropdown-menu{
+    background-color: #590B2D;
+}

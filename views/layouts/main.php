@@ -30,7 +30,7 @@ AppAsset::register($this);
         'brandLabel' => 'Bocconcini',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-bocconcini navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
@@ -39,7 +39,20 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Nosotros', 'url' => ['/site/about']],
             ['label' => 'Contáctenos', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (''):(['label' => 'Productos', 'url' => ['/producto']]),
+            Yii::$app->user->isGuest ? (''):([
+                'label' => 'Productos',
+                'items' => [
+                    ['label' => 'Categorías', 'url' => ['/productcategory']],
+                    ['label' => 'Productos', 'url' => ['/product']],
+                ],
+            ]),
+            Yii::$app->user->isGuest ? (''):([
+                'label' => 'Admin',
+                'items' => [
+                    ['label' => 'Ubicación Banner', 'url' => ['/bannerlocation']],
+                    ['label' => 'Banner', 'url' => ['/banner']],
+                ],
+            ]),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

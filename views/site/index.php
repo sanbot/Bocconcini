@@ -1,6 +1,6 @@
 <?php
 /* @var $this yii\web\View */
-use yii\helpers\BaseUrl;
+
 use yii\bootstrap\Carousel;
 $this->title = 'Bocconcini';
 ?>
@@ -8,13 +8,7 @@ $this->title = 'Bocconcini';
     <div class="row">
         <div class="col-md-12">
             <?= Carousel::widget([
-                'items' => [
-                    [
-                        'content' => '<img src="'. BaseUrl::base().'/uploads/page/banner1.png" width="100%"/>',
-                        //'caption' => '<h4>Bocconcini Sorpresa</h4><p>Los mejores detalles para ocasiones especiales.</p>',
-                        //'options' => [...],
-                    ],
-                ]
+                'items' => $banner
             ]);?>
         </div>
     </div>

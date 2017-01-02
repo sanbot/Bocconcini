@@ -88,8 +88,13 @@ class ProductController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->imagen = $model->URLImage();
+            if ($model->save()) {
+                $model->upload($model->id);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             $queryProductCategory = Productcategory::find()->all();
             return $this->render('update', [
@@ -106,8 +111,8 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
+        unlink('uploads/products/' . $id . '.' . $this->findModel($id)->imagen);
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

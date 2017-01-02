@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
+use yii\helpers\BaseUrl;
 
 /**
  * This is the model class for table "tblbanner".
@@ -63,4 +65,20 @@ class Banner extends \yii\db\ActiveRecord {
         return $this->imageFile->extension;
     }
 
+    public function findBannerImages($id){
+        
+        
+        $query = new Query;
+        $query->select("id,extension")
+                ->from('tblbanner')
+                ->where('location = '.$id);
+        $command = $query->createCommand();
+        $result = $command->queryAll();
+        $data = array();
+        foreach($result as $row){
+            array_push($data, '<img src="'. BaseUrl::base().'/uploads/banners/'.$row['id'].'.'.$row['extension'].'" width="100%"/>');
+        }
+
+        return $data;
+    }
 }

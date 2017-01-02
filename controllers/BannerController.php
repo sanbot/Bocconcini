@@ -14,13 +14,12 @@ use app\models\Bannerlocation;
 /**
  * BannerController implements the CRUD actions for Banner model.
  */
-class BannerController extends Controller
-{
+class BannerController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -35,14 +34,13 @@ class BannerController extends Controller
      * Lists all Banner models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
             'query' => Banner::find(),
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -51,10 +49,9 @@ class BannerController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -63,23 +60,21 @@ class BannerController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Banner();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->extension = $model->URLImage();
-            if($model->save()){
+            if ($model->save()) {
                 $model->upload($model->id);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-            
         } else {
             $queryBannerLocation = Bannerlocation::find()->all();
             return $this->render('create', [
-                'model' => $model,
-                'queryBannerLocation' => $queryBannerLocation,
+                        'model' => $model,
+                        'queryBannerLocation' => $queryBannerLocation,
             ]);
         }
     }
@@ -90,17 +85,21 @@ class BannerController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->extension = $model->URLImage();
+            if ($model->save()) {
+                $model->upload($model->id);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             $queryBannerLocation = Bannerlocation::find()->all();
             return $this->render('update', [
-                'model' => $model,
-                'queryBannerLocation' => $queryBannerLocation,
+                        'model' => $model,
+                        'queryBannerLocation' => $queryBannerLocation,
             ]);
         }
     }
@@ -111,8 +110,8 @@ class BannerController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
+        unlink('uploads/banners/' . $id . '.' . $this->findModel($id)->extension);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -125,8 +124,7 @@ class BannerController extends Controller
      * @return Banner the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Banner::findOne($id)) !== null) {
             return $model;
         } else {
