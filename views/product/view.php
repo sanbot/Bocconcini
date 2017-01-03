@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $PT;
                             'category',
                             'description',
                         ],
-                        'template' => '<div class="row"><div class="col-md-4"><p style="text-align:right;"><b>{label}</b></p></div><div class="col-md-8"><p>{value}</div></div>',
+                        'template' => '<div class="row"><div class="col-md-4"><p style="text-align:right;"><b>{label}</b></p></div><div class="col-md-8"><p>{value}</p></div></div>',
                     ]) ?>
                 </div>
             </div>

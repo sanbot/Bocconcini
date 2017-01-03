@@ -66,8 +66,6 @@ class Banner extends \yii\db\ActiveRecord {
     }
 
     public function findBannerImages($id){
-        
-        
         $query = new Query;
         $query->select("id,extension")
                 ->from('tblbanner')

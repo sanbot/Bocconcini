@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "tblproduct".
@@ -74,4 +75,13 @@ class Product extends \yii\db\ActiveRecord {
         return $this->imageFile->extension;
     }
 
+    public function findProductsHomePage(){
+        $query = new Query;
+        $query->select("*")
+                ->from('tblproduct');
+                //->where('location = '.$id);
+        $command = $query->createCommand();
+        $result = $command->queryAll();
+        return $result;
+    }
 }

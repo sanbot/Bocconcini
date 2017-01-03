@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Banner;
+use app\models\Product;
 
 class SiteController extends Controller {
 
@@ -60,9 +61,13 @@ class SiteController extends Controller {
     public function actionIndex() {
         $ban = new Banner();
         $data = $ban->findBannerImages(1);
+        
+        $pro = new Product();
+        $products = $pro->findProductsHomePage();
         //var_dump($data);exit(0);
         return $this->render('index', [
-                    'banner' => $data,
+            'banner' => $data,
+            'products' => $products,
         ]);
     }
 
