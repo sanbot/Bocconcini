@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Banner */
 
 $this->title = 'Bocconcini | Admin';
-$PT = 'Modificar imagen: '.$model->id;
+$PT = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Banners', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $PT;
 ?>

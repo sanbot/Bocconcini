@@ -7,12 +7,13 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Bannerlocation */
 
 $this->title = 'Bocconcini | Admin';
+$PT = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Ubicación de Banners', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Modificar: '.$this->title;
+$this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="bannerlocation-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($PT) ?></h1>
 
     <p>
         <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

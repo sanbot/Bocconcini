@@ -12,19 +12,33 @@ use yii\helpers\ArrayHelper;
 <div class="product-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'price')->textInput() ?>
-
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'category')->dropDownList(ArrayHelper::map($queryProductCategory, 'id', 'name')) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'category')->dropDownList(ArrayHelper::map($queryProductCategory, 'id', 'name')) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'price')->textInput() ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'imageFile')->fileInput() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <?= $form->field($model, 'description')->textarea(['maxlength' => true, 'rows'=>'6']) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+                <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => 'btn btn-primary btn-block']) ?>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

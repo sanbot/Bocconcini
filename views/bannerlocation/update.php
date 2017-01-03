@@ -6,13 +6,14 @@ use yii\helpers\Html;
 /* @var $model app\models\Bannerlocation */
 
 $this->title = 'Bocconcini | Admin';
+$PT = 'Modificar '.$model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Ubicación de Banners', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="bannerlocation-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($PT) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

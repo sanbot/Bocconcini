@@ -137,3 +137,15 @@ a.desc:after {
 .navbar-inverse .dropdown-menu{
     background-color: #590B2D;
 }
+
+.bocconcini-product{
+    background-color: #F5F5F5;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+}
+
+.label-product{
+    text-align: right;
+}

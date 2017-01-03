@@ -7,11 +7,12 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Bocconcini | Admin';
+$PT = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($PT) ?></h1>
 
     <p>Por favor llene los siguientes campos para iniciar sesión:</p>
 

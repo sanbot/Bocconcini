@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $PT;
     <h1><?= Html::encode($PT) ?></h1>
 
     <p>
-        <?= Html::a('Crear Producto', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Producto', ['create'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

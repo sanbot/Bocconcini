@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $PT;
 ?>
 <div class="bannerlocation-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($PT) ?></h1>
 
     <p>
         <?= Html::a('Crear Ubicación de Banner', ['create'], ['class' => 'btn btn-success']) ?>
