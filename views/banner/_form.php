@@ -12,13 +12,20 @@ use yii\helpers\ArrayHelper;
 <div class="banner-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
-
-    <?= $form->field($model, 'location')->dropDownList(ArrayHelper::map($queryBannerLocation, 'id', 'location')) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Agregar' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'location')->dropDownList(ArrayHelper::map($queryBannerLocation, 'id', 'location')) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'imageFile')->fileInput() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="form-group">
+                <?= Html::submitButton($model->isNewRecord ? 'Agregar' : 'Modificar', ['class' => 'btn btn-primary btn-block']) ?>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

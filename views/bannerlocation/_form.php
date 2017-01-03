@@ -11,11 +11,16 @@ use yii\widgets\ActiveForm;
 <div class="bannerlocation-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <br>
+            <div class="form-group">
+                <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => 'btn btn-primary btn-block']) ?>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
