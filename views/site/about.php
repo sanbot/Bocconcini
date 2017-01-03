@@ -4,12 +4,12 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Bocconcini | Admin';
+$this->title = 'Bocconcini';
 $PT = 'Nosotros';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $PT;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($PT) ?></h1>
 
     <p>
         This is the About page. You may modify the following file to customize its content:

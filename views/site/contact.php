@@ -8,13 +8,14 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = 'Contáctenos';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Bocconcini';
+$PT = 'Contáctenos';
+$this->params['breadcrumbs'][] = $PT;
 ?>
 <div class="site-contact">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <h1><?= Html::encode($this->title) ?></h1>
+                <h1><?= Html::encode($PT) ?></h1>
                 
                 <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
