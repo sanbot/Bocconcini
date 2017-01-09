@@ -32,9 +32,9 @@ $this->params['breadcrumbs'][] = $PT;
                 
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
-                    <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+                    <?= $form->field($model, 'name')->input('text', ['autofocus' => true, 'value'=> isset(Yii::$app->user->identity->name) ? Yii::$app->user->identity->name : '']) ?>
 
-                    <?= $form->field($model, 'email') ?>
+                    <?= $form->field($model, 'email')->input('email', ['value'=> isset(Yii::$app->user->identity->email) ? Yii::$app->user->identity->email : '']) ?>
 
                     <?= $form->field($model, 'subject') ?>
 

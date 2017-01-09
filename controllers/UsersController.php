@@ -3,24 +3,25 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Product;
+use app\models\Users;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use app\models\Productcategory;
 use yii\filters\AccessControl;
 
-/**
- * ProductController implements the CRUD actions for Product model.
- */
-class ProductController extends Controller {
+use app\models\Role;
 
+/**
+ * UsersController implements the CRUD actions for Users model.
+ */
+class UsersController extends Controller
+{
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -34,13 +35,8 @@ class ProductController extends Controller {
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
                         'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['view'],
-                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -48,107 +44,115 @@ class ProductController extends Controller {
     }
 
     /**
-     * Lists all Product models.
+     * Lists all Users models.
      * @return mixed
      */
-    public function actionIndex() {
-        $query = Product::find();
-        $query->joinWith(['productcategory']);
-        
+    public function actionIndex()
+    {
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => Users::find(),
         ]);
 
         return $this->render('index', [
-                    'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Product model.
+     * Displays a single Users model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Product model.
+     * Creates a new Users model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
-        $model = new Product();
-
+    public function actionCreate()
+    {
+        $model = new Users();
+        $queryRole = Role::find()->all();
+        
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
+            $model->password = md5($model->password);
+            if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'queryRole' => $queryRole,
+                ]);
             }
-        } else {
-            $queryProductCategory = Productcategory::find()->all();
+        } else {            
             return $this->render('create', [
                 'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                'queryRole' => $queryRole,
             ]);
         }
     }
 
     /**
-     * Updates an existing Product model.
+     * Updates an existing Users model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
+        $queryRole = Role::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
+            $model->password = md5($model->password);
+            if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'queryRole' => $queryRole,
+                ]);
             }
         } else {
-            $queryProductCategory = Productcategory::find()->all();
             return $this->render('update', [
                 'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                'queryRole' => $queryRole,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Product model.
+     * Deletes an existing Users model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
-        unlink('uploads/products/' . $id . '.' . $this->findModel($id)->imagen);
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
+
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Product model based on its primary key value.
+     * Finds the Users model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Product the loaded model
+     * @return Users the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
-        if (($model = Product::findOne($id)) !== null) {
+    protected function findModel($id)
+    {
+        if (($model = Users::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 }

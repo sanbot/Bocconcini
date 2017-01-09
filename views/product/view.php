@@ -17,14 +17,14 @@ $this->params['breadcrumbs'][] = $PT;
     <h1><?= Html::encode($PT) ?></h1>
 
     <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
+        <?= Yii::$app->user->isGuest ? ('') : Yii::$app->user->identity->roleid == 1 ? (Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary'])) : ('') ?>
+        <?= Yii::$app->user->isGuest ? ('') : Yii::$app->user->identity->roleid == 1 ? (Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => '¿Está seguro que quiere elimianr este producto?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ])) : ('') ?>
     </p>
     
     <div class="row">

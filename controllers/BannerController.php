@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\models\Bannerlocation;
+use yii\filters\AccessControl;
 
 /**
  * BannerController implements the CRUD actions for Banner model.
@@ -25,6 +26,17 @@ class BannerController extends Controller {
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -53,6 +65,9 @@ class BannerController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
+        if(Yii::$app->user->identity->roleid == 1){
+            
+        }
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
