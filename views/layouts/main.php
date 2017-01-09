@@ -44,6 +44,7 @@ AppAsset::register($this);
                 'items' => [
                     ['label' => 'Categorías', 'url' => ['/productcategory']],
                     ['label' => 'Productos', 'url' => ['/product']],
+                    ['label' => 'Imagen de productos', 'url' => ['/productimage']],
                 ],
             ]): (''),
             Yii::$app->user->isGuest ? (''): Yii::$app->user->identity->roleid == 1 ? ([

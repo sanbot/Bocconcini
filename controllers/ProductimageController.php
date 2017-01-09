@@ -3,20 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Product;
+use app\models\Productimage;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use app\models\Productcategory;
-use yii\filters\AccessControl;
-use app\models\Productimage;
+use app\models\Product;
 
 /**
- * ProductController implements the CRUD actions for Product model.
+ * ProductimageController implements the CRUD actions for Productimage model.
  */
-class ProductController extends Controller {
+class ProductimageController extends Controller {
 
     /**
      * @inheritdoc
@@ -29,33 +27,16 @@ class ProductController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['view'],
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Product models.
+     * Lists all Productimage models.
      * @return mixed
      */
     public function actionIndex() {
-        $query = Product::find();
-        $query->joinWith(['productcategory']);
-        
+        $query = Productimage::find()
+                ->joinWith('product');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -66,47 +47,42 @@ class ProductController extends Controller {
     }
 
     /**
-     * Displays a single Product model.
+     * Displays a single Productimage model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id) {
-        $modelProductImage = new Productimage();
-        $pi=new Productimage();
-        $banner = $pi->findImagesProduct($id);
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'modelProductImage' => $modelProductImage,
-            'banner' => $banner,
+                    'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Product model.
+     * Creates a new Productimage model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Product();
+        $model = new Productimage();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
+            $model->ext = $model->URLImage();
             if ($model->save()) {
-                $model->upload($model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
+                $model->upload($model->id, $model->productid);
+                return $this->redirect(['product/view', 'id' => $model->productid]);
             }
         } else {
-            $queryProductCategory = Productcategory::find()->all();
+            $queryProduct = Product::find()->all();
             return $this->render('create', [
-                'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                        'model' => $model,
+                        'queryProduct' => $queryProduct,
             ]);
         }
     }
 
     /**
-     * Updates an existing Product model.
+     * Updates an existing Productimage model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -116,41 +92,42 @@ class ProductController extends Controller {
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
+            $model->ext = $model->URLImage();
             if ($model->save()) {
-                $model->upload($model->id);
+                $model->upload($model->id, $model->productid);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            $queryProductCategory = Productcategory::find()->all();
+            $queryProduct = Product::find()->all();
             return $this->render('update', [
-                'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                        'model' => $model,
+                        'queryProduct' => $queryProduct,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Product model.
+     * Deletes an existing Productimage model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id) {
-        unlink('uploads/products/' . $id . '.' . $this->findModel($id)->imagen);
+        unlink('uploads/products/' . $this->findModel($id)->productid . '/' . $id . '.' . $this->findModel($id)->ext);
         $this->findModel($id)->delete();
+
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Product model based on its primary key value.
+     * Finds the Productimage model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Product the loaded model
+     * @return Productimage the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Product::findOne($id)) !== null) {
+        if (($model = Productimage::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

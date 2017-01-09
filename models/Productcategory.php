@@ -44,7 +44,7 @@ class Productcategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'Código',
-            'name' => 'Nombre',
+            'name' => 'Categoría',
             'maincategory' => 'Categoría Padre',
         ];
     }

@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\BaseUrl;
+use yii\bootstrap\Modal;
+use yii\widgets\ActiveForm;
+use yii\bootstrap\Carousel;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
@@ -25,6 +29,37 @@ $this->params['breadcrumbs'][] = $PT;
                 'method' => 'post',
             ],
         ])) : ('') ?>
+        <?php 
+        if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){
+            Modal::begin([
+                'header' => '<h2>Agregar imagenes</h2>',
+                'toggleButton' => ['label' => 'Agregar imagenes', 'class' => 'btn btn-primary'],
+            ]);
+        ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="productimage-form">
+
+                        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => BaseUrl::base().'/index.php?r=productimage/create']); ?>
+
+                        <?= $form->field($modelProductImage, 'imageFile')->fileInput() ?>
+
+                        <?= $form->field($modelProductImage, 'text')->textarea(['maxlength' => true, 'rows'=>'6']) ?>
+                        <div class="hidden">
+                        <?= $form->field($modelProductImage, 'productid')->input('text', ['value' => $model->id]) ?>
+                        </div>
+                        <div class="form-group">
+                            <?= Html::submitButton($modelProductImage->isNewRecord ? 'Crear' : 'Modificar', ['class' => 'btn btn-primary']) ?>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+
+                    </div>
+                </div>
+            </div>
+            <?php Modal::end();
+        }?>
+        
     </p>
     
     <div class="row">
@@ -52,7 +87,17 @@ $this->params['breadcrumbs'][] = $PT;
                     <button type="submit" class="btn btn-primary btn-block">Comprar</button>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary btn-block">Imagenes</button>
+                    <?php 
+                        Modal::begin([
+                            'header' => '<h2>'.$model->name.'</h2>',
+                            'toggleButton' => ['label' => 'Imagenes', 'class' => 'btn btn-primary btn-block'],
+                        ]);
+                        echo Carousel::widget([
+                            'items' => $banner
+                        ]);
+
+                        Modal::end();
+                    ?>
                 </div>
             </div>
         </div>

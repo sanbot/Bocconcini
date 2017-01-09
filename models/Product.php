@@ -50,7 +50,7 @@ class Product extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'Código',
-            'name' => 'Nombre',
+            'name' => 'Producto',
             'price' => 'Precio',
             'imagen' => 'Imagen',
             'imageFile' => 'Imagen',
@@ -83,5 +83,13 @@ class Product extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductimages()
+    {
+        return $this->hasMany(Productimage::className(), ['productid' => 'id']);
     }
 }
