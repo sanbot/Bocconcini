@@ -1,9 +1,9 @@
 <?php
 
 namespace app\models;
+use yii\db\Query;
 
 use Yii;
-use yii\db\Query;
 
 /**
  * This is the model class for table "tblproduct".
@@ -15,12 +15,12 @@ use yii\db\Query;
  * @property string $description
  * @property integer $category
  *
- * @property Tblproductcategory $id0
+ * @property Tblproductcategory $category0
+ * @property Tblproductimage[] $tblproductimages
  */
 class Product extends \yii\db\ActiveRecord {
 
     public $imageFile;
-
     /**
      * @inheritdoc
      */
@@ -33,13 +33,13 @@ class Product extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'price', 'imagen', 'category', 'imageFile'], 'required'],
+            [['name', 'price', 'imagen', 'category'], 'required'],
             [['price'], 'number'],
             [['category'], 'integer'],
             [['name'], 'string', 'max' => 150],
             [['imagen'], 'string', 'max' => 10],
             [['description'], 'string', 'max' => 700],
-            [['id'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['id' => 'id']],
+            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['category' => 'id']],
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }
@@ -53,9 +53,9 @@ class Product extends \yii\db\ActiveRecord {
             'name' => 'Producto',
             'price' => 'Precio',
             'imagen' => 'Imagen',
-            'imageFile' => 'Imagen',
             'description' => 'Descripción',
             'category' => 'Categoría',
+            'imageFile' => 'Imagen',
         ];
     }
 
@@ -64,6 +64,13 @@ class Product extends \yii\db\ActiveRecord {
      */
     public function getProductcategory() {
         return $this->hasOne(Productcategory::className(), ['id' => 'category']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductimages() {
+        return $this->hasMany(Productimage::className(), ['productid' => 'id']);
     }
 
     public function upload($name) {
@@ -84,13 +91,5 @@ class Product extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
-    }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductimages()
-    {
-        return $this->hasMany(Productimage::className(), ['productid' => 'id']);
     }
 }

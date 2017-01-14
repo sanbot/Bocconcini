@@ -29,11 +29,11 @@ class UsersController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -54,6 +54,13 @@ class UsersController extends Controller {
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionProfile() {
+        $id = Yii::$app->user->identity->id;
+        return $this->render('profile', [
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -124,6 +131,31 @@ class UsersController extends Controller {
             ]);
         }
     }
+    
+    public function actionUpdateprofile() {
+        $model = $this->findModel(Yii::$app->user->identity->id);
+        $queryRole = Role::find()->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->password = md5($model->password);
+            $model->password_repeat = md5($model->password_repeat);
+            if ($model->save()) {
+                return $this->redirect(['profile', 'id' => $model->id]);
+            } else {
+                $model->password = '';
+                return $this->render('update', [
+                            'model' => $model,
+                            'queryRole' => $queryRole,
+                ]);
+            }
+        } else {
+            $model->password = '';
+            return $this->render('update', [
+                        'model' => $model,
+                        'queryRole' => $queryRole,
+            ]);
+        }
+    }
 
     /**
      * Deletes an existing Users model.
@@ -145,7 +177,7 @@ class UsersController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Users::findOne($id)) !== null) {
+        if (($model = Users::find()->joinWith(['role'])->where('tbluser.id = ' . $id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

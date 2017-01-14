@@ -60,16 +60,14 @@ AppAsset::register($this);
             ]): (''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->name . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            ) : ([
+                'label' => Yii::$app->user->identity->name,
+                'items' => [
+                    ['label' => 'Perfil', 'url' => ['/users/profile']],
+                    ['label' => 'Carrito de compras', 'url' => ['/site']],
+                    ['label' => 'Logout', 'url' => ['/site/logout']],
+                ],
+            ])
         ],
     ]);
     NavBar::end();

@@ -120,7 +120,7 @@ a.desc:after {
     border-color: #590B2D;
 }
 
-.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .dropdown-menu>.active>a, .navbar-inverse .dropdown-menu>.active>a:hover {
     color: #ffffff;
     background-color: #5A1231;
 }
@@ -139,7 +139,7 @@ a.desc:after {
     background-color: #590B2D;
 }
 
-.bocconcini-product{
+.bocconcini-product, .bocconcini-profile{
     background-color: #F5F5F5;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -181,4 +181,8 @@ a.desc:after {
 
 .carousel-control.left, .carousel-control.right {
     background-image: none
+}
+
+.title-profile{
+    text-align: center;
 }
