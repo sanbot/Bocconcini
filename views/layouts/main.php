@@ -46,7 +46,9 @@ AppAsset::register($this);
                     ['label' => 'Productos', 'url' => ['/product']],
                     ['label' => 'Imagen de productos', 'url' => ['/productimage']],
                 ],
-            ]): (''),
+            ]): (
+                ['label' => 'Productos', 'url' => ['/product']]
+            ),
             Yii::$app->user->isGuest ? (''): Yii::$app->user->identity->roleid == 1 ? ([
                 'label' => 'Admin',
                 'items' => [

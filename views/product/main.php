@@ -1,22 +1,32 @@
 <?php
 /* @var $this yii\web\View */
 
-use yii\bootstrap\Carousel;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\helpers\BaseUrl;
 
 $this->title = 'Bocconcini';
+$PT = 'Productos';
 $formatter = \Yii::$app->formatter;
 ?>
-<div class="site-index">
+<div class="product-main">
     <div class="body-content">
-        <div class="row">
-            <div class="col-md-12">
-                <?= Carousel::widget([
-                    'items' => $banner
-                ]);?>
+         <h1><?= Html::encode($PT) ?></h1>
+         <div class="row">
+            <div class="productimage-form">
+                <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=product']); ?>
+                    <div class="col-md-8">
+                        <?= $form->field($model, 'description')->textInput()->label('Buscar') ?>
+                    </div>
+                    <div class="col-md-2">
+                        <br>
+                        <div class="form-group">
+                            <?= Html::submitButton('Search', ['class' => 'btn btn-primary btn-block']) ?>
+                        </div>
+                    </div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <br><br>
         <div class="row">
             <?php foreach($products as $product){?>
                 <div class="col-md-4">

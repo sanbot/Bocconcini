@@ -47,7 +47,7 @@ class UsersController extends Controller {
      */
     public function actionIndex() {
         $query = Users::find()
-                ->joinWith('Role');
+                ->joinWith('role');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -79,6 +79,7 @@ class UsersController extends Controller {
 
         if ($model->load(Yii::$app->request->post())) {
             $model->password = md5($model->password);
+            $model->password_repeat = md5($model->password_repeat);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -107,6 +108,7 @@ class UsersController extends Controller {
 
         if ($model->load(Yii::$app->request->post())) {
             $model->password = md5($model->password);
+            $model->password_repeat = md5($model->password_repeat);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {

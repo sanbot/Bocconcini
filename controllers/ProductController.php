@@ -40,7 +40,7 @@ class ProductController extends Controller {
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view'],
+                        'actions' => ['view', 'index'],
                         'roles' => ['?'],
                     ],
                 ],
@@ -53,16 +53,37 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $query = Product::find();
-        $query->joinWith(['productcategory']);
         
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $model = new Product();
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) {
+            $query = Product::find();
+            $query->joinWith(['productcategory']);
+            
+            if ($model->load(Yii::$app->request->post())) {
+                $query->orWhere('tblproduct.name like \'%' . $model->description . '%\'');
+                $query->orWhere('tblproduct.description like \'%' . $model->description . '%\'');
+            }
 
-        return $this->render('index', [
-                    'dataProvider' => $dataProvider,
-        ]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+
+            return $this->render('index', [
+                        'dataProvider' => $dataProvider,
+                        'model' => $model,
+            ]);
+        } else {
+            if ($model->load(Yii::$app->request->post())) {
+                $products = $model->findProductsHomePage($model->description);
+            }else{
+                $products = $model->findProductsHomePage('');
+            }
+            
+            return $this->render('main', [
+                        'model' => $model,
+                        'products' => $products,
+            ]);
+        }
     }
 
     /**
@@ -72,12 +93,12 @@ class ProductController extends Controller {
      */
     public function actionView($id) {
         $modelProductImage = new Productimage();
-        $pi=new Productimage();
+        $pi = new Productimage();
         $banner = $pi->findImagesProduct($id);
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'modelProductImage' => $modelProductImage,
-            'banner' => $banner,
+                    'model' => $this->findModel($id),
+                    'modelProductImage' => $modelProductImage,
+                    'banner' => $banner,
         ]);
     }
 
@@ -99,8 +120,8 @@ class ProductController extends Controller {
         } else {
             $queryProductCategory = Productcategory::find()->all();
             return $this->render('create', [
-                'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                        'model' => $model,
+                        'queryProductCategory' => $queryProductCategory,
             ]);
         }
     }
@@ -124,8 +145,8 @@ class ProductController extends Controller {
         } else {
             $queryProductCategory = Productcategory::find()->all();
             return $this->render('update', [
-                'model' => $model,
-                'queryProductCategory' => $queryProductCategory,
+                        'model' => $model,
+                        'queryProductCategory' => $queryProductCategory,
             ]);
         }
     }
@@ -150,7 +171,7 @@ class ProductController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Product::findOne($id)) !== null) {
+        if (($model = Product::find()->joinWith(['productcategory'])->where('tblproduct.id = ' . $id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

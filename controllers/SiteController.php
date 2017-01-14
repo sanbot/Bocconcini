@@ -63,7 +63,7 @@ class SiteController extends Controller {
         $data = $ban->findBannerImages(1);
         
         $pro = new Product();
-        $products = $pro->findProductsHomePage();
+        $products = $pro->findProductsHomePage('');
         //var_dump($data);exit(0);
         return $this->render('index', [
             'banner' => $data,

@@ -63,22 +63,22 @@ $this->params['breadcrumbs'][] = $PT;
     </p>
     
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="row bocconcini-product">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <img src="<?= BaseUrl::base().'/uploads/products/'.$model->id.'.'.$model->imagen ?>" class="img-responsive" style="border-radius: 5%;"/>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [
-                            'id',
+                            //'id',
                             'name',
-                            'price',
-                            'category',
+                            'price:currency',
+                            'productcategory.name',
                             'description',
                         ],
-                        'template' => '<div class="row"><div class="col-md-4"><p style="text-align:right;"><b>{label}</b></p></div><div class="col-md-8"><p>{value}</p></div></div>',
+                        'template' => '<div class="row"><div class="col-md-3"><p class="item-label"><b>{label}</b></p></div><div class="col-md-9"><p class="item-value">{value}</p></div></div>',
                     ]) ?>
                 </div>
             </div>

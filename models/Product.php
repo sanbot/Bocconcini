@@ -38,7 +38,7 @@ class Product extends \yii\db\ActiveRecord {
             [['category'], 'integer'],
             [['name'], 'string', 'max' => 150],
             [['imagen'], 'string', 'max' => 10],
-            [['description'], 'string', 'max' => 500],
+            [['description'], 'string', 'max' => 700],
             [['id'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['id' => 'id']],
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
@@ -75,11 +75,12 @@ class Product extends \yii\db\ActiveRecord {
         return $this->imageFile->extension;
     }
 
-    public function findProductsHomePage(){
+    public function findProductsHomePage($description){
         $query = new Query;
         $query->select("*")
-                ->from('tblproduct');
-                //->where('location = '.$id);
+                ->from('tblproduct')
+                ->orWhere('tblproduct.name like \'%' . $description . '%\'')
+                ->orWhere('tblproduct.description like \'%' . $description . '%\'');
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;

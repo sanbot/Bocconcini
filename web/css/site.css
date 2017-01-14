@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    background-color: #E4EFFF;
 }
 
 .wrap {
@@ -153,8 +154,31 @@ a.desc:after {
     margin-top: 20px;
     border: 1px solid #dddddd;
     border-radius: 3px;
+    height: 450px;
 }
 
 .label-product{
     text-align: right;
+}
+
+@media(max-width: 1000px){
+
+    .item-label{
+        text-align: left;
+    }
+}
+
+@media(min-width: 1000px){
+
+    .item-label{
+        text-align: right;
+    }
+}
+
+.item-value{
+    text-align: justify;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
 }
