@@ -2,7 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 use yii\helpers\BaseUrl;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,6 +17,21 @@ $this->params['breadcrumbs'][] = $PT;
 
     <h1><?= Html::encode($PT) ?></h1>
 
+    <div class="row">
+        <div class="productimage-form">
+            <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=productimage']); ?>
+                <div class="col-md-8">
+                    <?= $form->field($model, 'productid')->dropDownList(ArrayHelper::map($queryProduct, 'id', 'name')) ?>
+                </div>
+                <div class="col-md-2">
+                    <br>
+                    <div class="form-group">
+                        <?= Html::submitButton('Search', ['class' => 'btn btn-primary btn-block']) ?>
+                    </div>
+                </div>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
     <p>
         <?= Html::a('Crear', ['create'], ['class' => 'btn btn-primary']) ?>
     </p>

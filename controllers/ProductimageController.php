@@ -35,14 +35,25 @@ class ProductimageController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+
+        $model = new Productimage();
+        $queryProduct = Product::find()->all();
+
         $query = Productimage::find()
                 ->joinWith('product');
+
+        if ($model->load(Yii::$app->request->post())) {
+            $query->where('productid = ' . $model->productid);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
+                    'model' => $model,
+                    'queryProduct' => $queryProduct,
         ]);
     }
 

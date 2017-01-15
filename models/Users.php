@@ -41,6 +41,7 @@ class Users extends \yii\db\ActiveRecord {
             ['email', 'email'],
             ['password_repeat', 'required'],
             ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => "Las contraseñas no coinciden"],
+            //['password', 'match', 'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/i', 'message' => 'La contraseña debe tener mínimo una letra mayúscula, una letra minúscula, y un número. Debe tener entre 6 y 30 Carácteres.']
         ];
     }
 

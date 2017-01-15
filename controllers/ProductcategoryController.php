@@ -126,7 +126,7 @@ class ProductcategoryController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Productcategory::findOne($id)) !== null) {
+        if (($model = Productcategory::find()->select('tblproductcategory.id, tblproductcategory.name, catpad.name as main')->join('left join', ['tblproductcategory as catpad'], 'catpad.id = tblproductcategory.maincategory')->where('tblproductcategory.id = '.$id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

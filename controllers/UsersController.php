@@ -46,17 +46,25 @@ class UsersController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+
+        $model = new Users();
         $query = Users::find()
                 ->joinWith('role');
+
+        if ($model->load(Yii::$app->request->post())) {
+            $query->where('tbluser.name like \'%' . $model->name . '%\'');
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
+                    'model' => $model,
         ]);
     }
-    
+
     public function actionProfile() {
         $id = Yii::$app->user->identity->id;
         return $this->render('profile', [
@@ -131,7 +139,7 @@ class UsersController extends Controller {
             ]);
         }
     }
-    
+
     public function actionUpdateprofile() {
         $model = $this->findModel(Yii::$app->user->identity->id);
         $queryRole = Role::find()->all();
