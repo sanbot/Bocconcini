@@ -3,19 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Banner;
+use app\models\Discountproduct;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use app\models\Bannerlocation;
 use yii\filters\AccessControl;
+use app\models\Discount;
+use app\models\Product;
 
 /**
- * BannerController implements the CRUD actions for Banner model.
+ * DiscountproductController implements the CRUD actions for Discountproduct model.
  */
-class BannerController extends Controller {
+class DiscountproductController extends Controller {
 
     /**
      * @inheritdoc
@@ -30,11 +30,11 @@ class BannerController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'add'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'add'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -43,13 +43,13 @@ class BannerController extends Controller {
     }
 
     /**
-     * Lists all Banner models.
+     * Lists all Discountproduct models.
      * @return mixed
      */
     public function actionIndex() {
-        $query = Banner::find();
-        $query->joinWith(['bannerlocation']);
-        
+        $query = Discountproduct::find()
+                ->joinWith(['product'])
+                ->joinWith(['discount']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -60,52 +60,49 @@ class BannerController extends Controller {
     }
 
     /**
-     * Displays a single Banner model.
+     * Displays a single Discountproduct model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id) {
-        if(Yii::$app->user->identity->roleid == 1){
-            
-        }
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Banner model.
+     * Creates a new Discountproduct model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Banner();
+        $model = new Discountproduct();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->extension = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else{
-                $queryBannerLocation = Bannerlocation::find()->all();
-                Yii::$app->session->setFlash('error', $model->getErrors());
-                return $this->render('create', [
-                            'model' => $model,
-                            'queryBannerLocation' => $queryBannerLocation,
-                ]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $queryBannerLocation = Bannerlocation::find()->all();
+            $queryProduct = Product::find()->all();
+            $querydiscount = Discount::find()->where('curdate() between initialdate and finaldate')->all();
             return $this->render('create', [
                         'model' => $model,
-                        'queryBannerLocation' => $queryBannerLocation,
+                        'queryProduct' => $queryProduct,
+                        'querydiscount' => $querydiscount,
             ]);
+        }
+    }
+    
+    public function actionAdd() {
+        $model = new Discountproduct();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['discount/view', 'id' => $model->discountid]);
+        } else {
+            return $this->redirect(['discount/view', 'id' => $model->discountid]);
         }
     }
 
     /**
-     * Updates an existing Banner model.
+     * Updates an existing Discountproduct model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -113,47 +110,44 @@ class BannerController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->extension = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $queryBannerLocation = Bannerlocation::find()->all();
+            $queryProduct = Product::find()->all();
+            $querydiscount = Discount::find()->where('curdate() between initialdate and finaldate')->all();
             return $this->render('update', [
                         'model' => $model,
-                        'queryBannerLocation' => $queryBannerLocation,
+                        'queryProduct' => $queryProduct,
+                        'querydiscount' => $querydiscount,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Banner model.
+     * Deletes an existing Discountproduct model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id) {
-        unlink('uploads/banners/' . $id . '.' . $this->findModel($id)->extension);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Banner model based on its primary key value.
+     * Finds the Discountproduct model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Banner the loaded model
+     * @return Discountproduct the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Banner::find()->joinWith(['bannerlocation'])->where('tblbanner.id = '.$id)->one()) !== null) {
+        if (($model = Discountproduct::find()->joinWith(['product', 'discount'])->where('tbldiscountproduct.id = ' . $id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

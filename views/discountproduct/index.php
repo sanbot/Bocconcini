@@ -7,27 +7,25 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Bocconcini | Admin';
-$PT = 'Banners';
+$PT = 'Productos en Descuento';
 $this->params['breadcrumbs'][] = $PT;
 ?>
-<div class="banner-index">
+<div class="discountproduct-index">
 
     <h1><?= Html::encode($PT) ?></h1>
 
     <p>
-        <?= Html::a('Agregar Imagen a Banner', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Agregar Producto a un descuento', ['create'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'extension',
-            'bannerlocation.location',
-            'initialdate:date',
-            'finaldate:date',
-            'order',
+            //'id',
+            'product.name',
+            'discount.name',
+            'discount.percent',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

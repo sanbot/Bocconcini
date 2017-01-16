@@ -72,6 +72,10 @@ class Product extends \yii\db\ActiveRecord {
     public function getProductimages() {
         return $this->hasMany(Productimage::className(), ['productid' => 'id']);
     }
+    
+    public function getDiscountproducts() {
+        return $this->hasMany(Discountproduct::className(), ['productid' => 'id']);
+    }
 
     public function upload($name) {
         $this->imageFile->saveAs('uploads/products/' . $name . '.' . $this->imageFile->extension);

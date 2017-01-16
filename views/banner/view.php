@@ -32,6 +32,9 @@ $this->params['breadcrumbs'][] = $PT;
                                 //'id',
                                 //'extension',
                                 'bannerlocation.location',
+                                'initialdate:date',
+                                'finaldate:date',
+                                'order',
                             ],
                             'template' => '<div class="row"><div class="col-md-3"><p class="item-label"><b>{label}</b></p></div><div class="col-md-9"><p class="item-value">{value}</p></div></div>',
                         ]) ?>

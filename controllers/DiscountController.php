@@ -3,19 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Banner;
+use app\models\Discount;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use app\models\Bannerlocation;
 use yii\filters\AccessControl;
+use app\models\Discountproduct;
+use app\models\Product;
 
 /**
- * BannerController implements the CRUD actions for Banner model.
+ * DiscountController implements the CRUD actions for Discount model.
  */
-class BannerController extends Controller {
+class DiscountController extends Controller {
 
     /**
      * @inheritdoc
@@ -34,7 +34,7 @@ class BannerController extends Controller {
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -43,15 +43,12 @@ class BannerController extends Controller {
     }
 
     /**
-     * Lists all Banner models.
+     * Lists all Discount models.
      * @return mixed
      */
     public function actionIndex() {
-        $query = Banner::find();
-        $query->joinWith(['bannerlocation']);
-        
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => Discount::find(),
         ]);
 
         return $this->render('index', [
@@ -60,52 +57,52 @@ class BannerController extends Controller {
     }
 
     /**
-     * Displays a single Banner model.
+     * Displays a single Discount model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id) {
-        if(Yii::$app->user->identity->roleid == 1){
-            
-        }
+        $modelDiscountproduct = new Discountproduct();
+        
+        $queryProduct = Product::find()
+                ->join('left join' , 'tbldiscountproduct', 'tblproduct.id = tbldiscountproduct.prductid')
+                ->where('tbldiscountproduct.prductid is null')->all();
+        
+        $query = Discountproduct::find()
+                ->joinWith(['product'])
+                ->joinWith(['discount'])
+                ->where('tbldiscount.id = '.$id);
+        $dataProviderProducts = new ActiveDataProvider([
+            'query' => $query,
+        ]);
         return $this->render('view', [
                     'model' => $this->findModel($id),
+                    'modelDiscountproduct' => $modelDiscountproduct,
+                    'queryProduct' => $queryProduct, 
+                    'dataProviderProducts' => $dataProviderProducts,
         ]);
     }
 
     /**
-     * Creates a new Banner model.
+     * Creates a new Discount model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Banner();
+        $model = new Discount();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->extension = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else{
-                $queryBannerLocation = Bannerlocation::find()->all();
-                Yii::$app->session->setFlash('error', $model->getErrors());
-                return $this->render('create', [
-                            'model' => $model,
-                            'queryBannerLocation' => $queryBannerLocation,
-                ]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $queryBannerLocation = Bannerlocation::find()->all();
+            Yii::$app->session->setFlash('error', $model->getErrors());
             return $this->render('create', [
                         'model' => $model,
-                        'queryBannerLocation' => $queryBannerLocation,
             ]);
         }
     }
 
     /**
-     * Updates an existing Banner model.
+     * Updates an existing Discount model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -113,47 +110,40 @@ class BannerController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->extension = $model->URLImage();
-            if ($model->save()) {
-                $model->upload($model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $queryBannerLocation = Bannerlocation::find()->all();
             return $this->render('update', [
                         'model' => $model,
-                        'queryBannerLocation' => $queryBannerLocation,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Banner model.
+     * Deletes an existing Discount model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id) {
-        unlink('uploads/banners/' . $id . '.' . $this->findModel($id)->extension);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Banner model based on its primary key value.
+     * Finds the Discount model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Banner the loaded model
+     * @return Discount the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Banner::find()->joinWith(['bannerlocation'])->where('tblbanner.id = '.$id)->one()) !== null) {
+        if (($model = Discount::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

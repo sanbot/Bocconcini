@@ -45,6 +45,8 @@ AppAsset::register($this);
                     ['label' => 'Categorías', 'url' => ['/productcategory']],
                     ['label' => 'Productos', 'url' => ['/product']],
                     ['label' => 'Imagen de productos', 'url' => ['/productimage']],
+                    ['label' => 'Descuentos', 'url' => ['/discount']],
+                    ['label' => 'Productos en Descuento', 'url' => ['/discountproduct']],
                 ],
             ]): (
                 ['label' => 'Productos', 'url' => ['/product']]
@@ -58,6 +60,7 @@ AppAsset::register($this);
                     ['label' => 'Roles', 'url' => ['/role']],
                 ],
             ]): (''),
+            Yii::$app->user->isGuest ? (['label' => 'Regístrate', 'url' => ['/users/singup']]) : (''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : ([

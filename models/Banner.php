@@ -12,8 +12,11 @@ use yii\helpers\BaseUrl;
  * @property integer $id
  * @property string $extension
  * @property integer $location
+ * @property string $initialdate
+ * @property string $finaldate
+ * @property integer $order
  *
- * @property Tblbannerlocation $id0
+ * @property Tblbannerlocation $location0
  */
 class Banner extends \yii\db\ActiveRecord {
 
@@ -30,10 +33,13 @@ class Banner extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['location'], 'integer'],
+            [['location', 'order'], 'integer'],
+            [['initialdate', 'finaldate'], 'safe'],
             [['extension'], 'string', 'max' => 10],
-            [['id'], 'exist', 'skipOnError' => true, 'targetClass' => Banner::className(), 'targetAttribute' => ['id' => 'id']],
+            [['location'], 'exist', 'skipOnError' => true, 'targetClass' => Bannerlocation::className(), 'targetAttribute' => ['location' => 'id']],
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            ['initialdate', 'compare', 'compareAttribute' => 'finaldate', 'operator' => '<', 'message' => 'Fecha inicial debe ser menor a Fecha final.'],
+            [['location', 'order', 'extension'], 'required'],
         ];
     }
 
@@ -45,6 +51,10 @@ class Banner extends \yii\db\ActiveRecord {
             'id' => 'Código',
             'extension' => 'Imagen',
             'location' => 'Ubicación',
+            'initialdate' => 'Fecha inicial',
+            'finaldate' => 'Fecha Final',
+            'order' => 'Orden',
+            'imageFile' => 'Imagen',
         ];
     }
 
@@ -69,7 +79,11 @@ class Banner extends \yii\db\ActiveRecord {
         $query = new Query;
         $query->select("id,extension")
                 ->from('tblbanner')
-                ->where('location = '.$id);
+                ->where('location = '.$id)
+                ->where('curdate() between initialdate and finaldate')
+                ->orWhere('finaldate is null')
+                ->orWhere('initialdate is null')
+                ->orderBy('order asc');
         $command = $query->createCommand();
         $result = $command->queryAll();
         $data = array();

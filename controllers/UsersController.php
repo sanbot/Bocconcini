@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Role;
+use app\models\LoginForm;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -35,6 +36,11 @@ class UsersController extends Controller {
                         'allow' => true,
                         'actions' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['singup'],
+                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -107,6 +113,34 @@ class UsersController extends Controller {
             return $this->render('create', [
                         'model' => $model,
                         'queryRole' => $queryRole,
+            ]);
+        }
+    }
+
+    public function actionSingup() {
+        $model = new Users();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->roleid = 2;
+            $password = $model->password;
+            $model->password = md5($model->password);
+            $model->password_repeat = md5($model->password_repeat);
+            if ($model->save()) {
+                $modelLogin = new LoginForm();
+                $modelLogin->username = $model->username;
+                $modelLogin->password = $password;
+                $modelLogin->login();
+                return $this->redirect(['site/index']);
+            } else {
+                $model->password = '';
+                $model->password_repeat = '';
+                return $this->render('singup', [
+                            'model' => $model,
+                ]);
+            }
+        } else {
+            return $this->render('singup', [
+                        'model' => $model,
             ]);
         }
     }
