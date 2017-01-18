@@ -53,7 +53,7 @@ $formatter = \Yii::$app->formatter;
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p><b>Precio</b></p>
-                                        <p><?= $formatter->asCurrency($product['price'])?></p>
+                                        <p><?= $formatter->asCurrency($product['discount'] <$product['price']?$product['discount']:$product['price'])?></p>
                                     </div>
                                 </div>
                                 <!--<div class="row">

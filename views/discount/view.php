@@ -84,8 +84,17 @@ $this->params['breadcrumbs'][] = $PT;
                             'product.name',
                             'discount.name',
                             'discount.percent',
+                            'value',
 
-                            //['class' => 'yii\grid\ActionColumn'],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header'=>'Acciones',
+                                'template'=>'{delete}',
+                                'urlCreator' => function ($action, $model, $key, $index) {
+                                    $url = BaseUrl::base().'/index.php?r=discountproduct/remove'.'&id='.$model->id.'&discountid='.$model->discount->id;
+                                    return $url;
+                                }
+                            ]
                         ],
                     ]); ?>
                 </div>

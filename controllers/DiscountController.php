@@ -69,6 +69,7 @@ class DiscountController extends Controller {
                 ->where('tbldiscountproduct.prductid is null')->all();
         
         $query = Discountproduct::find()
+                ->select('tblproduct.*, tbldiscount.*, tbldiscountproduct.*, tblproduct.price * (1- (tbldiscount.percent / 100)) as value')
                 ->joinWith(['product'])
                 ->joinWith(['discount'])
                 ->where('tbldiscount.id = '.$id);

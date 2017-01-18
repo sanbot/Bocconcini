@@ -12,6 +12,8 @@ use yii\web\UploadedFile;
 use app\models\Productcategory;
 use yii\filters\AccessControl;
 use app\models\Productimage;
+use app\models\Discountproduct;
+use app\models\Discount;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -171,7 +173,16 @@ class ProductController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Product::find()->joinWith(['productcategory'])->where('tblproduct.id = ' . $id)->one()) !== null) {
+        $model = Product::find()->joinWith(['productcategory'])->where('tblproduct.id = ' . $id)->one();
+        
+        if ($model !== null) {
+            $modelDis = Discount::find()
+                    ->joinWith(['discountproducts'])
+                    ->where('tbldiscountproduct.prductid = ' . $id)
+                    ->where('curdate() between tbldiscount.initialdate and tbldiscount.finaldate')->one();
+            if($modelDis !== null){
+                $model->price = $model->price * ( 1 - ($modelDis->percent / 100));
+            }
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

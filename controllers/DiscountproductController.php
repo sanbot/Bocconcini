@@ -30,11 +30,11 @@ class DiscountproductController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete', 'add'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'add', 'remove'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'add'],
+                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'add', 'remove'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -99,6 +99,12 @@ class DiscountproductController extends Controller {
         } else {
             return $this->redirect(['discount/view', 'id' => $model->discountid]);
         }
+    }
+    
+    public function actionRemove($id, $discountid) {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['discount/view', 'id'=>$discountid]);
     }
 
     /**

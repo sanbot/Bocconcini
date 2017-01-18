@@ -31,6 +31,11 @@ $formatter = \Yii::$app->formatter;
                             <div class="col-md-10 col-md-offset-1">
                                 <div class="row">
                                     <div class="col-md-1 col-md-offset-11">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1 col-md-offset-11">
                                         <a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>" style="text-align: right;"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
                                     </div>
                                 </div>
@@ -43,7 +48,7 @@ $formatter = \Yii::$app->formatter;
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p><b>Precio</b></p>
-                                        <p><?= $formatter->asCurrency($product['price'])?></p>
+                                        <p><?= $formatter->asCurrency($product['discount'] <$product['price']?$product['discount']:$product['price'])?></p>
                                     </div>
                                 </div>
                                 <!--<div class="row">

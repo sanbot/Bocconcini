@@ -20,6 +20,7 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord {
 
+    public $discount;
     public $imageFile;
     /**
      * @inheritdoc
@@ -41,6 +42,7 @@ class Product extends \yii\db\ActiveRecord {
             [['description'], 'string', 'max' => 700],
             [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['category' => 'id']],
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            ['discount', 'safe']
         ];
     }
 
@@ -56,6 +58,7 @@ class Product extends \yii\db\ActiveRecord {
             'description' => 'Descripción',
             'category' => 'Categoría',
             'imageFile' => 'Imagen',
+            'discount' => 'Precio con descuento'
         ];
     }
 
@@ -88,10 +91,12 @@ class Product extends \yii\db\ActiveRecord {
 
     public function findProductsHomePage($description){
         $query = new Query;
-        $query->select("*")
-                ->from('tblproduct')
-                ->orWhere('tblproduct.name like \'%' . $description . '%\'')
-                ->orWhere('tblproduct.description like \'%' . $description . '%\'');
+        $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
+                ->from('tblproduct pro')
+                ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
+                ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate')
+                ->orWhere('pro.name like \'%' . $description . '%\'')
+                ->orWhere('pro.description like \'%' . $description . '%\'');
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
