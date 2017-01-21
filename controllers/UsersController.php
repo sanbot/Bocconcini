@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Role;
 use app\models\LoginForm;
+use app\models\Useraddress;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -73,8 +74,15 @@ class UsersController extends Controller {
 
     public function actionProfile() {
         $id = Yii::$app->user->identity->id;
+        $queryAddress = Useraddress::find()
+                ->joinWith(['municipality'])
+                ->where('tbluseraddress.userid = '.$id);
+        $dataProviderAddress = new ActiveDataProvider([
+            'query' => $queryAddress,
+        ]);
         return $this->render('profile', [
                     'model' => $this->findModel($id),
+            'dataProviderAddress' => $dataProviderAddress,
         ]);
     }
 

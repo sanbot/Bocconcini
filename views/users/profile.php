@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\helpers\BaseUrl;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
@@ -44,10 +46,40 @@ $this->params['breadcrumbs'][] = $PT;
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProviderAddress,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+
+                            //'id',
+                            //'users.name',
+                            'alias',
+                            'municipality.name',
+                            'district',
+                            'address',
+                            // 'commentary',
+
+
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header'=>'Acciones',
+                                'template'=>'{view}{update}{delete}',
+                                'urlCreator' => function ($action, $model, $key, $index) {
+                                    if($action == 'delete'){
+                                        $action = 'removefromprofile';
+                                    }else{
+                                        $action = 'updatefromprofile';
+                                    }
+                                    $url = BaseUrl::base().'/index.php?r=useraddress/'.$action.'&id='.$model->id;
+                                    return $url;
+                                }
+                            ],
+                        ],
+                    ]); ?>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3"><?= Html::a('Agregar Dirección', ['site/index'], ['class' => 'btn btn-primary btn-block']) ?></div>
+                <div class="col-md-3"><?= Html::a('Agregar Dirección', ['useraddress/addtoprofile'], ['class' => 'btn btn-primary btn-block']) ?></div>
             </div>
             
             <div class="row">
