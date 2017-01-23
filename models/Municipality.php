@@ -37,7 +37,7 @@ class Municipality extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'Código',
-            'name' => 'Municipio',
+            'name' => 'Departamento',
         ];
     }
 

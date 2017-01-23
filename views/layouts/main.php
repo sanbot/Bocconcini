@@ -59,7 +59,7 @@ AppAsset::register($this);
                     ['label' => 'Usuarios', 'url' => ['/users']],
                     ['label' => 'Roles', 'url' => ['/role']],
                     ['label' => 'Direcciones de usuarios', 'url' => ['/useraddress']],
-                    ['label' => 'Municipios', 'url' => ['/municipality']],
+                    ['label' => 'Departamentos', 'url' => ['/municipality']],
                 ],
             ]): (''),
             Yii::$app->user->isGuest ? (['label' => 'Regístrate', 'url' => ['/users/singup']]) : (''),

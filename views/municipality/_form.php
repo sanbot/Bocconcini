@@ -16,6 +16,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
+            <label></label>
             <div class="form-group">
                 <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => 'btn btn-block btn-primary']) ?>
             </div>

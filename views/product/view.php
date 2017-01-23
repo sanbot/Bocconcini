@@ -17,9 +17,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $PT;
 ?>
 <div class="product-view">
-
-    <h1><?= Html::encode($PT) ?></h1>
-
     <p>
         <?= Yii::$app->user->isGuest ? ('') : Yii::$app->user->identity->roleid == 1 ? (Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary'])) : ('') ?>
         <?= Yii::$app->user->isGuest ? ('') : Yii::$app->user->identity->roleid == 1 ? (Html::a('Eliminar', ['delete', 'id' => $model->id], [
@@ -63,8 +60,11 @@ $this->params['breadcrumbs'][] = $PT;
     </p>
     
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="row bocconcini-product">
+        <div class="col-md-10 col-md-offset-1 bocconcini-product">
+            <div class="row">
+                <div class="col-md-12"><h1 class="center"><?= Html::encode($PT) ?></h1></div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <img src="<?= BaseUrl::base().'/uploads/products/'.$model->id.'.'.$model->imagen ?>" class="img-responsive" style="border-radius: 5%;"/>
                 </div>
@@ -82,7 +82,8 @@ $this->params['breadcrumbs'][] = $PT;
                     ]) ?>
                 </div>
             </div>
-            <div class="row bocconcini-product">
+            <br>
+            <div class="row">
                 <div class="col-md-3 col-md-offset-3">
                     <button type="submit" class="btn btn-primary btn-block">Comprar</button>
                 </div>
@@ -103,6 +104,58 @@ $this->params['breadcrumbs'][] = $PT;
         </div>
     </div>
 
+    <br><br>
     
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 bocconcini-product">
+            <div class="row">
+                <div class="col-md-12"><h3 class="center">Comentarios</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    
+                    <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=productcommentary/add']); ?>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <?= $form->field($modelProductCommentary, 'commentary')->textarea(['maxlength' => true, 'row' => 7]) ?>
+                        </div>
+                        <div class="hidden">
+                            <?= $form->field($modelProductCommentary, 'productid')->input('text', ['value' => $model->id]) ?>
+                        </div>
+                        <div class="col-md-4">
+                            <label></label>
+                            <div class="form-group">
+                                <?= Html::submitButton('Comentar', ['class' => 'btn btn-block btn-primary']) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php ActiveForm::end(); ?>
+                    
+                    <?php foreach($comments as $comment){?>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="thumbnail">
+                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                            </div><!-- /thumbnail -->
+                        </div><!-- /col-sm-1 -->
+
+                        <div class="col-md-10">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong><?=$comment['usuario']?></strong> <span class="text-muted">commented <?=$comment['date']?></span>
+                                </div>
+                                <div class="panel-body">
+                                    <?=$comment['commentary']?>
+                                    <br>
+                                    <?= Html::a('Responder ' , ['productcommentary/showcomments', 'id' => $comment['id']]) ?> - <?= $comment['cantidad']?> <?= Html::a('Respuestas ' , ['productcommentary/showcomments', 'id' => $comment['id']]) ?>
+                                </div><!-- /panel-body -->
+                            </div><!-- /panel panel-default -->
+                        </div><!-- /col-sm-5 -->
+                    </div><!-- /row -->
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

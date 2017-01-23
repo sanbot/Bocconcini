@@ -14,6 +14,7 @@ use yii\filters\AccessControl;
 use app\models\Productimage;
 use app\models\Discountproduct;
 use app\models\Discount;
+use app\models\Productcommentary;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -55,12 +56,12 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        
+
         $model = new Product();
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) {
             $query = Product::find();
             $query->joinWith(['productcategory']);
-            
+
             if ($model->load(Yii::$app->request->post())) {
                 $query->orWhere('tblproduct.name like \'%' . $model->description . '%\'');
                 $query->orWhere('tblproduct.description like \'%' . $model->description . '%\'');
@@ -77,10 +78,10 @@ class ProductController extends Controller {
         } else {
             if ($model->load(Yii::$app->request->post())) {
                 $products = $model->findProductsHomePage($model->description);
-            }else{
+            } else {
                 $products = $model->findProductsHomePage('');
             }
-            
+
             return $this->render('main', [
                         'model' => $model,
                         'products' => $products,
@@ -95,12 +96,18 @@ class ProductController extends Controller {
      */
     public function actionView($id) {
         $modelProductImage = new Productimage();
+        $modelProductCommentary = new Productcommentary();
+
         $pi = new Productimage();
         $banner = $pi->findImagesProduct($id);
+
+        $comments = $modelProductCommentary->findCommentsProduct($id);
         return $this->render('view', [
                     'model' => $this->findModel($id),
                     'modelProductImage' => $modelProductImage,
                     'banner' => $banner,
+                    'modelProductCommentary' => $modelProductCommentary,
+                    'comments' => $comments,
         ]);
     }
 
@@ -174,13 +181,13 @@ class ProductController extends Controller {
      */
     protected function findModel($id) {
         $model = Product::find()->joinWith(['productcategory'])->where('tblproduct.id = ' . $id)->one();
-        
+
         if ($model !== null) {
             $modelDis = Discount::find()
-                    ->joinWith(['discountproducts'])
-                    ->where('tbldiscountproduct.prductid = ' . $id)
-                    ->where('curdate() between tbldiscount.initialdate and tbldiscount.finaldate')->one();
-            if($modelDis !== null){
+                            ->joinWith(['discountproducts'])
+                            ->where('tbldiscountproduct.prductid = ' . $id)
+                            ->where('curdate() between tbldiscount.initialdate and tbldiscount.finaldate')->one();
+            if ($modelDis !== null) {
                 $model->price = $model->price * ( 1 - ($modelDis->percent / 100));
             }
             return $model;
