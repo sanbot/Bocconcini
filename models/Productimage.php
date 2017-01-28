@@ -70,7 +70,7 @@ class Productimage extends \yii\db\ActiveRecord {
         return $this->imageFile->extension;
     }
 
-    public function findImagesProduct($id){
+    public function findImagesProduct($id, $ext){
         $query = new Query;
         $query->select("*")
                 ->from('tblproductimage')
@@ -78,6 +78,7 @@ class Productimage extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         $data = array();
+        array_push($data, '<img src="'. BaseUrl::base().'/uploads/products/'.$id.'.'.$ext.'" width="100%"/>');
         foreach($result as $row){
             array_push($data, '<img src="'. BaseUrl::base().'/uploads/products/'.$row['productid'].'/'.$row['id'].'.'.$row['ext'].'" width="100%"/>');
         }

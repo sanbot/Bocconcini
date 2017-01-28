@@ -79,10 +79,7 @@ class Banner extends \yii\db\ActiveRecord {
         $query = new Query;
         $query->select("id,extension")
                 ->from('tblbanner')
-                ->where('location = '.$id)
-                ->where('curdate() between initialdate and finaldate')
-                ->orWhere('finaldate is null')
-                ->orWhere('initialdate is null')
+                ->where('location = '.$id . ' and ((curdate() between initialdate and finaldate) or (finaldate is null and initialdate is null))')
                 ->orderBy('order asc');
         $command = $query->createCommand();
         $result = $command->queryAll();

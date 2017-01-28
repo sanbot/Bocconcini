@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $PT;
 
             'id',
             'name',
-            'price',
+            'price:decimal',
             //'imagen',
             //'description',
             'productcategory.name',

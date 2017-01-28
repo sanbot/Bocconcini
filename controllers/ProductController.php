@@ -99,7 +99,7 @@ class ProductController extends Controller {
         $modelProductCommentary = new Productcommentary();
 
         $pi = new Productimage();
-        $banner = $pi->findImagesProduct($id);
+        $banner = $pi->findImagesProduct($id, $this->findModel($id)->imagen);
 
         $comments = $modelProductCommentary->findCommentsProduct($id);
         return $this->render('view', [

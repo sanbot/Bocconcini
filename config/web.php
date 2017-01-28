@@ -50,6 +50,9 @@ $config = [
             ],
         ],
         */
+        'formatter' => [
+            'currencyCode' => 'COP',
+            ],
     ],
     'params' => $params,
 ];

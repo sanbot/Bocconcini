@@ -45,9 +45,7 @@ $this->params['breadcrumbs'][] = $PT;
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="thumbnail">
-                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                            </div><!-- /thumbnail -->
+                            <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
                         </div><!-- /col-sm-1 -->
 
                         <div class="col-md-10">
@@ -64,9 +62,7 @@ $this->params['breadcrumbs'][] = $PT;
                     <?php foreach ($comments as $comment) { ?>
                         <div class="row">
                             <div class="col-md-2">
-                                <div class="thumbnail">
-                                    <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                                </div><!-- /thumbnail -->
+                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
                             </div><!-- /col-sm-1 -->
 
                             <div class="col-md-10">

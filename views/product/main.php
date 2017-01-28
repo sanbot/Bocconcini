@@ -33,35 +33,26 @@ $formatter = \Yii::$app->formatter;
                     <div class="bocconcini-product-item">
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1">
-                                <a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>"><img src="<?= BaseUrl::base().'/uploads/products/'.$product['id'].'.'.$product['imagen'] ?>" class="img-responsive" style="border-radius: 3%;"/></a>
+                                <?php if($product['discount'] <$product['price']) {?>
+                                    <img src="<?= BaseUrl::base().'/uploads/site/bigsale.png'?>" class="img-responsive bigsale"/>
+                                <?php } ?>
+                                <a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>"><img src="<?= BaseUrl::base().'/uploads/products/'.$product['id'].'.'.$product['imagen'] ?>" class="img-responsive img-producto"/></a>
                             </div>
                         </div>
                         <br>
-                        <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
-                                <div class="row">
-                                    <div class="col-md-1 col-md-offset-11">
-                                        <a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>" style="text-align: right;"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-                                    </div>
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>" class="label-linkproduct"><?= $product['name']?></a></p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <p><b>Nombre</b></p>
-                                        <p><?= $product['name']?></p>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>Por: <b>$<?= $formatter->asDecimal($product['discount'] < $product['price']?$product['discount']:$product['price'])?></b></p>
+                                    <?php if($product['discount'] <$product['price']) {?>
+                                        <p>Antes: <b style="text-decoration:line-through;">$<?= $formatter->asDecimal($product['price']) ?></b></p>
+                                    <?php } ?>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <p><b>Precio</b></p>
-                                        <p><?= $formatter->asCurrency($product['discount'] <$product['price']?$product['discount']:$product['price'])?></p>
-                                    </div>
-                                </div>
-                                <!--<div class="row">
-                                    <div class="col-md-12">
-                                        <p><b>Descripción</b></p>
-                                        <p><?= $product['description']?></p>
-                                    </div>
-                                </div>-->
                             </div>
                         </div>
                     </div>

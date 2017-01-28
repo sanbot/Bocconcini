@@ -15,6 +15,8 @@ $this->title = 'Bocconcini | Admin';
 $PT = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $PT;
+
+$formatter = \Yii::$app->formatter;
 ?>
 <div class="product-view">
     <p>
@@ -62,43 +64,46 @@ $this->params['breadcrumbs'][] = $PT;
     <div class="row">
         <div class="col-md-10 col-md-offset-1 bocconcini-product">
             <div class="row">
-                <div class="col-md-12"><h1 class="center"><?= Html::encode($PT) ?></h1></div>
+                <div class="col-md-12"><h1 class="center label-productname"><?= Html::encode($PT) ?></h1></div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <img src="<?= BaseUrl::base().'/uploads/products/'.$model->id.'.'.$model->imagen ?>" class="img-responsive" style="border-radius: 5%;"/>
+                <div class="col-md-6">
+                    <?= Carousel::widget([
+                            'items' => $banner
+                        ]);
+                    ?>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="label-price">$ <?= $formatter->asDecimal($model->price) ?></p>
+                        </div>
+                    </div>
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [
                             //'id',
-                            'name',
-                            'price:currency',
+                            //'name',
                             'productcategory.name',
                             'description',
                         ],
-                        'template' => '<div class="row"><div class="col-md-3"><p class="item-label"><b>{label}</b></p></div><div class="col-md-9"><p class="item-value">{value}</p></div></div>',
+                        'template' => '<div class="row"><div class="col-md-12"><p class="item-label"><b>{label}</b></p><p class="item-value">{value}</p></div></div>',
                     ]) ?>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-md-3 col-md-offset-3">
-                    <button type="submit" class="btn btn-primary btn-block">Comprar</button>
+                    <div class="form-group">
+                        <label class="control-label" for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control" name="cantidad" min="0" max="100"/>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <?php 
-                        Modal::begin([
-                            'header' => '<h2>'.$model->name.'</h2>',
-                            'toggleButton' => ['label' => 'Imagenes', 'class' => 'btn btn-primary btn-block'],
-                        ]);
-                        echo Carousel::widget([
-                            'items' => $banner
-                        ]);
-
-                        Modal::end();
-                    ?>
+                <div class="col-md-3">  
+                    <br>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Comprar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,9 +139,7 @@ $this->params['breadcrumbs'][] = $PT;
                     <?php foreach($comments as $comment){?>
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="thumbnail">
-                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                            </div><!-- /thumbnail -->
+                            <img class="img-responsive user-photo" src="<?= BaseUrl::base().'/uploads/' ?>site/logo_bococcini.png">
                         </div><!-- /col-sm-1 -->
 
                         <div class="col-md-10">
