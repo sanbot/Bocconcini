@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 
 /**
  * ProductcategoryController implements the CRUD actions for Productcategory model.
@@ -45,10 +46,9 @@ class ProductcategoryController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $query = Productcategory::find();
-        $query->joinWith(['productcategory pc'])->select(['tblproductcategory.id','tblproductcategory.name','pc.name main']);
+        $query = new Productcategory();
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query->listCategories(),
         ]);
 
         return $this->render('index', [
@@ -75,8 +75,19 @@ class ProductcategoryController extends Controller {
     public function actionCreate() {
         $model = new Productcategory();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if(isset($model->imageFile->extension)){$model->imagen = $model->URLImage();}
+            if($model->save()){
+                if(isset($model->imageFile->extension)){$model->upload($model->id);}
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                $queryCategory = Productcategory::find()->all();
+                return $this->render('create', [
+                    'model' => $model,
+                    'queryCategory' => $queryCategory,
+                ]); 
+            }
         } else {
             $queryCategory = Productcategory::find()->all();
             return $this->render('create', [
@@ -96,7 +107,18 @@ class ProductcategoryController extends Controller {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if(isset($model->extension)){$model->extension = $model->URLImage();}
+            if($model->save()){
+                if(isset($model->extension)){$model->upload($model->id);}
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                $queryCategory = Productcategory::find()->all();
+                return $this->render('create', [
+                    'model' => $model,
+                    'queryCategory' => $queryCategory,
+                ]); 
+            }
         } else {
             $queryCategory = Productcategory::find()->all();
             return $this->render('update', [
@@ -126,7 +148,8 @@ class ProductcategoryController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Productcategory::find()->select('tblproductcategory.id, tblproductcategory.name, catpad.name as main')->join('left join', ['tblproductcategory as catpad'], 'catpad.id = tblproductcategory.maincategory')->where('tblproductcategory.id = '.$id)->one()) !== null) {
+        $pc = new Productcategory();
+        if (($model = $pc->findModel($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

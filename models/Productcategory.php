@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "tblproductcategory".
@@ -10,58 +11,86 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property integer $maincategory
+ * @property string $imagen
  *
- * @property Tblproduct $tblproduct
+ * @property Tblproduct[] $tblproducts
  */
-class Productcategory extends \yii\db\ActiveRecord
-{
+class Productcategory extends \yii\db\ActiveRecord {
+
+    public $imageFile;
     public $main;
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'tblproductcategory';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'maincategory'], 'required'],
             [['maincategory'], 'integer'],
             [['name'], 'string', 'max' => 150],
-            [['main'], 'safe']
+            [['imagen'], 'string', 'max' => 10],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg'],
+            ['main', 'safe']
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'id' => 'Código',
-            'name' => 'Categoría',
+            'id' => 'ID',
+            'name' => 'Categoria',
             'maincategory' => 'Categoría Padre',
+            'imagen' => 'Imagen',
+            'imageFile' => 'Imagen',
+            'main' => 'Categoría Padre'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTblproduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'category']);
+    public function getProducts() {
+        return $this->hasMany(Product::className(), ['category' => 'id']);
     }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductcategory()
-    {
+
+    public function getProductcategory() {
         return $this->hasOne(Productcategory::className(), ['id' => 'maincategory']);
     }
+
+    public function upload($name) {
+        $this->imageFile->saveAs('uploads/categories/' . $name . '.' . $this->imageFile->extension);
+        return 'uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+    }
+
+    public function URLImage() {
+        return $this->imageFile->extension;
+    }
+
+    public function listCategories() {
+        return Productcategory::find()
+                        ->joinWith(['productcategory pc'])
+                        ->select(['tblproductcategory.id', 'tblproductcategory.name', 'pc.name main']);
+    }
+
+    public function findModel($id) {
+        return Productcategory::find()
+                        ->select('tblproductcategory.id, tblproductcategory.name, catpad.name as main, tblproductcategory.imagen')
+                        ->join('left join', ['tblproductcategory as catpad'], 'catpad.id = tblproductcategory.maincategory')
+                        ->where(['tblproductcategory.id' => $id])
+                        ->one();
+    }
+
+    public function listParentCategoriesProduct($productid) {
+        return Productcategory::find()->where('id <> 1 and id <> ' . $productid)->all();
+    }
+
 }

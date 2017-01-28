@@ -71,7 +71,6 @@ class Banner extends \yii\db\ActiveRecord {
     }
 
     public function URLImage() {
-
         return $this->imageFile->extension;
     }
 
@@ -79,7 +78,8 @@ class Banner extends \yii\db\ActiveRecord {
         $query = new Query;
         $query->select("id,extension")
                 ->from('tblbanner')
-                ->where('location = '.$id . ' and ((curdate() between initialdate and finaldate) or (finaldate is null and initialdate is null))')
+                ->where(['location' => $id])
+                ->andWhere('((curdate() between initialdate and finaldate) or (finaldate is null and initialdate is null))')
                 ->orderBy('order asc');
         $command = $query->createCommand();
         $result = $command->queryAll();

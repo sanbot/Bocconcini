@@ -3,19 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Discount;
+use app\models\Categoryproducts;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\Discountproduct;
-use app\models\Product;
 
 /**
- * DiscountController implements the CRUD actions for Discount model.
+ * CategoryproductsController implements the CRUD actions for Categoryproducts model.
  */
-class DiscountController extends Controller {
+class CategoryproductsController extends Controller {
 
     /**
      * @inheritdoc
@@ -30,11 +28,11 @@ class DiscountController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'add', 'remove'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'add', 'remove'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -43,12 +41,12 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Lists all Discount models.
+     * Lists all Categoryproducts models.
      * @return mixed
      */
     public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
-            'query' => Discount::find(),
+            'query' => Categoryproducts::find(),
         ]);
 
         return $this->render('index', [
@@ -57,52 +55,50 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Displays a single Discount model.
+     * Displays a single Categoryproducts model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id) {
-        $modelDiscountproduct = new Discountproduct();
-        
-        $product = new Product();
-        $queryProduct = $product->listProducts();
-        
-        $query = Discountproduct::find()
-                ->select('tblproduct.*, tbldiscount.*, tbldiscountproduct.*, tblproduct.price * (1- (tbldiscount.percent / 100)) as value')
-                ->joinWith(['product'])
-                ->joinWith(['discount'])
-                ->where('tbldiscount.id = '.$id);
-        $dataProviderProducts = new ActiveDataProvider([
-            'query' => $query,
-        ]);
         return $this->render('view', [
                     'model' => $this->findModel($id),
-                    'modelDiscountproduct' => $modelDiscountproduct,
-                    'queryProduct' => $queryProduct, 
-                    'dataProviderProducts' => $dataProviderProducts,
         ]);
     }
 
     /**
-     * Creates a new Discount model.
+     * Creates a new Categoryproducts model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Discount();
+        $model = new Categoryproducts();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            Yii::$app->session->setFlash('error', $model->getErrors());
             return $this->render('create', [
                         'model' => $model,
             ]);
         }
     }
+    
+    /**
+     * Creates a new Categoryproducts model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionAdd() {
+        $model = new Categoryproducts();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['product/view', 'id' => $model->productid]);
+        } else {
+            return $this->redirect(['product/view', 'id' => $model->productid]);
+        }
+    }
 
     /**
-     * Updates an existing Discount model.
+     * Updates an existing Categoryproducts model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -120,7 +116,7 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Deletes an existing Discount model.
+     * Deletes an existing Categoryproducts model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -130,16 +126,29 @@ class DiscountController extends Controller {
 
         return $this->redirect(['index']);
     }
+    
+    /**
+     * Deletes an existing Categoryproducts model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRemove($id) {
+        $productid = $this->findModel($id)->productid;
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['product/view', 'id' => $productid]);
+    }
 
     /**
-     * Finds the Discount model based on its primary key value.
+     * Finds the Categoryproducts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Discount the loaded model
+     * @return Categoryproducts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Discount::findOne($id)) !== null) {
+        if (($model = Categoryproducts::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

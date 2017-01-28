@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-use yii\db\Query;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "tblproduct".
@@ -100,6 +100,12 @@ class Product extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
+    }
+    
+    public function listProducts(){
+        return Product::find()
+                ->join('left join' , 'tbldiscountproduct', 'tblproduct.id = tbldiscountproduct.prductid')
+                ->where('tbldiscountproduct.prductid is null')->all();
     }
 
 }

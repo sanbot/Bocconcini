@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\BaseUrl;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Productcategory */
@@ -19,11 +20,14 @@ $this->params['breadcrumbs'][] = $PT;
                 <div class="col-md-12"><h3 class="title-profile">Categoría: <?= Html::encode($PT) ?></h3></div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
+                    <img src="<?= BaseUrl::base().'/uploads/categories/'.$model->id.'.'.$model->imagen ?>" class="img-responsive" style="border-radius: 5%;"/>
+                </div>
+                <div class="col-md-8">
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [
-                            'id',
+                            //'id',
                             'name',
                             'main',
                         ],
@@ -31,6 +35,7 @@ $this->params['breadcrumbs'][] = $PT;
                     ]) ?>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
                     <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

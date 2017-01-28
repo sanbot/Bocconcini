@@ -12,7 +12,7 @@ use yii\web\UploadedFile;
 use app\models\Productcategory;
 use yii\filters\AccessControl;
 use app\models\Productimage;
-use app\models\Discountproduct;
+use app\models\Categoryproducts;
 use app\models\Discount;
 use app\models\Productcommentary;
 
@@ -97,9 +97,19 @@ class ProductController extends Controller {
     public function actionView($id) {
         $modelProductImage = new Productimage();
         $modelProductCommentary = new Productcommentary();
+        $modelCategoryproducts = new Categoryproducts();
 
         $pi = new Productimage();
         $banner = $pi->findImagesProduct($id, $this->findModel($id)->imagen);
+        
+        $category = new Productcategory();
+        $queryCategory = $category->listParentCategoriesProduct($this->findModel($id)->category);
+        
+        $categoryproducts = new Categoryproducts();
+        $queryCategoryproducts = $categoryproducts->listCategoryProducts($id);
+        $dataProviderCategoryproducts = new ActiveDataProvider([
+            'query' => $queryCategoryproducts,
+        ]);
 
         $comments = $modelProductCommentary->findCommentsProduct($id);
         return $this->render('view', [
@@ -108,6 +118,9 @@ class ProductController extends Controller {
                     'banner' => $banner,
                     'modelProductCommentary' => $modelProductCommentary,
                     'comments' => $comments,
+                    'dataProviderCategory' => $dataProviderCategoryproducts,
+                    'modelCategoryproducts' => $modelCategoryproducts,
+                    'queryCategory' => $queryCategory,
         ]);
     }
 

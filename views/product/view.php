@@ -6,6 +6,8 @@ use yii\helpers\BaseUrl;
 use yii\bootstrap\Modal;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Carousel;
+use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 
 /* @var $this yii\web\View */
@@ -109,6 +111,57 @@ $formatter = \Yii::$app->formatter;
         </div>
     </div>
 
+    <br><br>
+    
+    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) { ?>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 bocconcini-product">
+            <div class="row">
+                <div class="col-md-12"><h3 class="center">Categorías del producto</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=categoryproducts/add']); ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $form->field($modelCategoryproducts, 'categoryid')->dropDownList(ArrayHelper::map($queryCategory, 'id', 'name')); ?>
+                            </div>
+                            <div class="hidden">
+                                <?= $form->field($modelCategoryproducts, 'productid')->input('text', ['value' => $model->id]) ?>
+                            </div>
+                            <div class="col-md-6">
+                                <label></label>
+                                <?= Html::submitButton('Agregar', ['class' => 'btn btn-primary btn-block']) ?>
+                            </div>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProviderCategory,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                            //'id',
+                            'category.name',
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header'=>'Acciones',
+                                'template'=>'{delete}',
+                                'urlCreator' => function ($action, $model, $key, $index) {
+                                    $url = BaseUrl::base().'/index.php?r=categoryproducts/remove'.'&id='.$model->id;
+                                    return $url;
+                                }
+                            ]
+                        ],
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    
     <br><br>
     
     <div class="row">

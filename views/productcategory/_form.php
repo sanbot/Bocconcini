@@ -11,13 +11,18 @@ use yii\helpers\ArrayHelper;
 
 <div class="productcategory-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
     <div class="row">
         <div class="col-md-6">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
             <?= $form->field($model, 'maincategory')->dropDownList(ArrayHelper::map($queryCategory, 'id', 'name')) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <?= $form->field($model, 'imageFile')->fileInput() ?>
         </div>
     </div>
     <div class="row">
