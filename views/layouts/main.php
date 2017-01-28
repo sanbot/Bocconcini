@@ -9,8 +9,15 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\BaseUrl;
+use app\models\Banner;
 
 AppAsset::register($this);
+$img = Banner::find()->where('location = 2')->one();
+if(!isset($img)){
+    $img = new stdClass();
+    $img->id = '';
+    $img->extension = '';
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -27,22 +34,37 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
+ 
 <div class="wrap">
+    <div id="banner" class="<?= ($img->id == '') ? 'hidden' : ''?>">
+        <div class="row banner-menu" style="background-image: url(<?=  BaseUrl::base().'/uploads/banners/'.$img->id.'.'.$img->extension ?>);">
+            <div class="container">
+                <div class="pull-left link-bannermenu">
+                    <?= Html::a('Nosotros', ['/site/about']). ' / ' ?>
+                    <?= Html::a('Contáctenos', ['/site/contact']) ?>
+                </div>
+                <div class="pull-right link-bannermenu <?= (!Yii::$app->user->isGuest) ? 'hidden' : ''?>">
+                    <?php if(Yii::$app->user->isGuest){ 
+                        echo Html::a('Login', ['/site/login']). ' / ';
+                        echo Html::a('Regístrate', ['/users/singup']);
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php
     NavBar::begin([
         'brandLabel' => 'Bocconcini',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-bocconcini navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-bocconcini',
+            'id' => 'topnavbar'
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Nosotros', 'url' => ['/site/about']],
-            ['label' => 'Contáctenos', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (''): Yii::$app->user->identity->roleid == 1 ? ([
                 'label' => 'Productos',
                 'items' => [
@@ -66,10 +88,7 @@ AppAsset::register($this);
                     ['label' => 'Departamentos', 'url' => ['/municipality']],
                 ],
             ]): (''),
-            Yii::$app->user->isGuest ? (['label' => 'Regístrate', 'url' => ['/users/singup']]) : (''),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : ([
+            Yii::$app->user->isGuest ? ('') : ([
                 'label' => Yii::$app->user->identity->name,
                 'items' => [
                     ['label' => 'Perfil', 'url' => ['/users/profile']],

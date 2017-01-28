@@ -180,29 +180,29 @@ a.desc:after {
     padding:0px;
 }
 .panel {
-	position:relative;
+    position:relative;
 }
 .panel>.panel-heading:after,.panel>.panel-heading:before{
-	position:absolute;
-	top:11px;left:-16px;
-	right:100%;
-	width:0;
-	height:0;
-	display:block;
-	content:" ";
-	border-color:transparent;
-	border-style:solid solid outset;
-	pointer-events:none;
+    position:absolute;
+    top:11px;left:-16px;
+    right:100%;
+    width:0;
+    height:0;
+    display:block;
+    content:" ";
+    border-color:transparent;
+    border-style:solid solid outset;
+    pointer-events:none;
 }
 .panel>.panel-heading:after{
-	border-width:7px;
-	border-right-color:#f7f7f7;
-	margin-top:1px;
-	margin-left:2px;
+    border-width:7px;
+    border-right-color:#f7f7f7;
+    margin-top:1px;
+    margin-left:2px;
 }
 .panel>.panel-heading:before{
-	border-right-color:#ddd;
-	border-width:8px;
+    border-right-color:#ddd;
+    border-width:8px;
 }
 
 .bigsale{
@@ -235,4 +235,34 @@ a.desc:after {
 
 .carousel-control, .carousel-control:hover, .carousel-control:focus{
     color: #590B2D;
+}
+
+#topnavbar {
+    margin: 0;
+}
+#topnavbar.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+#banner {
+    width: 100%;
+}
+
+@media (max-width: 2000px){
+    .banner-menu{background-size: cover; background-repeat: no-repeat; height: 200px;}
+}
+
+.link-bannermenu{
+    background-color: #F5F5F5;
+    opacity: 0.7;
+    border: 1px solid #dddddd;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.link-bannermenu > a, .link-bannermenu > a:hover{
+    text-decoration: none;
 }
