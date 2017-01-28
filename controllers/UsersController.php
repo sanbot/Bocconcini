@@ -31,11 +31,11 @@ class UsersController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile', 'changepassword'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'profile', 'updateprofile', 'changepassword'],
                         'roles' => ['@'],
                     ],
                     [
@@ -80,8 +80,11 @@ class UsersController extends Controller {
         $dataProviderAddress = new ActiveDataProvider([
             'query' => $queryAddress,
         ]);
+        
+        $model = $this->findModel($id);
+        $model->password = '';
         return $this->render('profile', [
-                    'model' => $this->findModel($id),
+                    'model' => $model,
             'dataProviderAddress' => $dataProviderAddress,
         ]);
     }
@@ -169,12 +172,14 @@ class UsersController extends Controller {
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
+                $model->password = '';
                 return $this->render('update', [
                             'model' => $model,
                             'queryRole' => $queryRole,
                 ]);
             }
         } else {
+            $model->password = '';
             return $this->render('update', [
                         'model' => $model,
                         'queryRole' => $queryRole,
@@ -193,16 +198,39 @@ class UsersController extends Controller {
                 return $this->redirect(['profile', 'id' => $model->id]);
             } else {
                 $model->password = '';
-                return $this->render('update', [
+                return $this->render('updateprofile', [
                             'model' => $model,
                             'queryRole' => $queryRole,
                 ]);
             }
         } else {
             $model->password = '';
-            return $this->render('update', [
+            return $this->render('updateprofile', [
                         'model' => $model,
                         'queryRole' => $queryRole,
+            ]);
+        }
+    }
+    
+    public function actionChangepassword() {
+        $model = $this->findModel(Yii::$app->user->identity->id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->password = md5($model->password);
+            $model->password_repeat = md5($model->password_repeat);
+            if ($model->save()) {
+                Yii::$app->session->setFlash('change_password', 'Se logró cambiar la contraseña.');
+                return $this->redirect(['profile', 'id' => $model->id]);
+            } else {
+                $model->password = '';
+                return $this->render('updateprofile', [
+                            'model' => $model,
+                ]);
+            }
+        } else {
+            $model->password = '';
+            return $this->render('updateprofile', [
+                        'model' => $model,
             ]);
         }
     }

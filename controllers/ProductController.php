@@ -120,14 +120,27 @@ class ProductController extends Controller {
         $model = new Product();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
+            if (isset($model->imageFile)) {
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                if (isset($model->imageFile->extension)) {
+                    $model->imagen = $model->URLImage();
+                }
+            }
             if ($model->save()) {
-                $model->upload($model->id);
+                if (isset($model->imageFile->extension)) {
+                    $model->upload($model->id);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                $queryProductCategory = Productcategory::find()->where('id <> 1')->all();
+                Yii::$app->session->setFlash('error_image', 'La imágen es obligatoria para la creación de un producto.');
+                return $this->render('create', [
+                            'model' => $model,
+                            'queryProductCategory' => $queryProductCategory,
+                ]);
             }
         } else {
-            $queryProductCategory = Productcategory::find()->all();
+            $queryProductCategory = Productcategory::find()->where('id <> 1')->all();
             return $this->render('create', [
                         'model' => $model,
                         'queryProductCategory' => $queryProductCategory,
@@ -146,9 +159,13 @@ class ProductController extends Controller {
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->imagen = $model->URLImage();
+            if (isset($model->imageFile->extension)) {
+                $model->imagen = $model->URLImage();
+            }
             if ($model->save()) {
-                $model->upload($model->id);
+                if (isset($model->imageFile->extension)) {
+                    $model->upload($model->id);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -180,13 +197,14 @@ class ProductController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        $model = Product::find()->joinWith(['productcategory'])->where('tblproduct.id = ' . $id)->one();
+        $model = Product::find()->joinWith(['productcategory'])->where(['tblproduct.id' => $id])->one();
 
         if ($model !== null) {
             $modelDis = Discount::find()
-                            ->joinWith(['discountproducts'])
-                            ->where('tbldiscountproduct.prductid = ' . $id)
-                            ->where('curdate() between tbldiscount.initialdate and tbldiscount.finaldate')->one();
+                    ->joinWith(['discountproducts'])
+                    ->where(['tbldiscountproduct.prductid' => $id])
+                    ->andWhere('curdate() between tbldiscount.initialdate and tbldiscount.finaldate')
+                    ->one();
             if ($modelDis !== null) {
                 $model->price = $model->price * ( 1 - ($modelDis->percent / 100));
             }

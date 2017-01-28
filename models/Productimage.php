@@ -74,7 +74,7 @@ class Productimage extends \yii\db\ActiveRecord {
         $query = new Query;
         $query->select("*")
                 ->from('tblproductimage')
-                ->where('productid = '.$id);
+                ->where(['productid' => $id]);
         $command = $query->createCommand();
         $result = $command->queryAll();
         $data = array();

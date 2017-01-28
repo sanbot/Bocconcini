@@ -112,8 +112,9 @@ if(!isset($img)){
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; Bocconcini <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right"><a href="https://www.facebook.com/Bocconcini-Sorpresas-303320096479255/" title="Facebook" class="red-social" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></p>
+        <p class="pull-right"><a href="https://www.instagram.com/bocconcini.sorpresas/" title="Instagram" class="red-social" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></p>
+        <!--<p class="pull-right"><?= Yii::powered() ?></p>-->
     </div>
 </footer>
 

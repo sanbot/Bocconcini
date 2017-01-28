@@ -76,10 +76,9 @@ class Productcommentary extends \yii\db\ActiveRecord {
         $query->select("com.id, com.commentary, user.name usuario, date, ( select count(id) from tblproductcommentary c where c.parentcommentaryid = com.id) as cantidad ")
                 ->from('tblproductcommentary com')
                 ->join('left join', 'tbluser user', 'user.id = com.userid')
-                ->where('com.visible = 1')
-                ->where('com.productid = ' . $productid)
-                ->where('com.parentcommentaryid is null')
+                ->where(['com.visible' => 1, 'com.productid' => $productid, 'com.parentcommentaryid' => null])
                 ->orderBy('date desc');
+        
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
@@ -91,8 +90,7 @@ class Productcommentary extends \yii\db\ActiveRecord {
                 ->from('tblproductcommentary com')
                 ->join('left join', 'tbluser user', 'user.id = com.userid')
                 ->join('left join', 'tblproduct pro', 'pro.id = com.productid')
-                ->where('com.visible = 1')
-                ->where('com.parentcommentaryid = ' . $id)
+                ->where(['com.visible' => 1, 'com.parentcommentaryid' => $id])
                 ->orderBy('date asc');
         $command = $query->createCommand();
         $result = $command->queryAll();

@@ -1,8 +1,8 @@
 <?php
 
 namespace app\models;
-use yii\db\Query;
 
+use yii\db\Query;
 use Yii;
 
 /**
@@ -41,7 +41,7 @@ class Product extends \yii\db\ActiveRecord {
             [['imagen'], 'string', 'max' => 10],
             [['description'], 'string', 'max' => 700],
             [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['category' => 'id']],
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg'],
             ['discount', 'safe']
         ];
     }
@@ -75,7 +75,7 @@ class Product extends \yii\db\ActiveRecord {
     public function getProductimages() {
         return $this->hasMany(Productimage::className(), ['productid' => 'id']);
     }
-    
+
     public function getDiscountproducts() {
         return $this->hasMany(Discountproduct::className(), ['productid' => 'id']);
     }
@@ -89,7 +89,7 @@ class Product extends \yii\db\ActiveRecord {
         return $this->imageFile->extension;
     }
 
-    public function findProductsHomePage($description){
+    public function findProductsHomePage($description) {
         $query = new Query;
         $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
                 ->from('tblproduct pro')
@@ -101,4 +101,5 @@ class Product extends \yii\db\ActiveRecord {
         $result = $command->queryAll();
         return $result;
     }
+
 }

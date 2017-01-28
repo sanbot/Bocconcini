@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\helpers\BaseUrl;
+use yii\bootstrap\Modal;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
@@ -23,6 +25,13 @@ $this->params['breadcrumbs'][] = $PT;
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <?php if(Yii::$app->session->getFlash('change_password') != null){?>
+                    <div class="alert alert-success"><?= Yii::$app->session->getFlash('change_password') ?></div>
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [
@@ -39,6 +48,39 @@ $this->params['breadcrumbs'][] = $PT;
             </div>
             <div class="row">
                 <div class="col-md-3"><?= Html::a('Modificar', ['updateprofile'], ['class' => 'btn btn-primary btn-block']) ?></div>
+                <div class="col-md-3">
+                    <?php 
+                        Modal::begin([
+                            'header' => '<h2>Cambiar Contraseña</h2>',
+                            'toggleButton' => ['label' => 'Cambiar Contraseña', 'class' => 'btn btn-primary'],
+                            
+                        ]);?>
+
+                        <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=users/changepassword']); ?>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <?= $form->field($model, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="form-group">
+                                    <?= Html::submitButton('Cambiar', ['class' => 'btn btn-primary btn-block']) ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+
+                        <?php Modal::end();
+                    ?>
+                </div>
             </div>
         
             <div class="row">
@@ -50,16 +92,10 @@ $this->params['breadcrumbs'][] = $PT;
                         'dataProvider' => $dataProviderAddress,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-
-                            //'id',
-                            //'users.name',
                             'alias',
                             'municipality.name',
                             'district',
                             'address',
-                            // 'commentary',
-
-
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header'=>'Acciones',

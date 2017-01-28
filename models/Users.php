@@ -39,7 +39,7 @@ class Users extends \yii\db\ActiveRecord {
             [['username'], 'unique'],
             [['roleid'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['roleid' => 'id']],
             ['email', 'email'],
-            ['password_repeat', 'required'],
+            [['name', 'username', 'password', 'email', 'password_repeat'], 'required'],
             ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => "Las contraseñas no coinciden"],
             //['password', 'match', 'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/i', 'message' => 'La contraseña debe tener mínimo una letra mayúscula, una letra minúscula, y un número. Debe tener entre 6 y 30 Carácteres.']
         ];
