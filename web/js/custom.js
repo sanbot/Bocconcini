@@ -10,4 +10,9 @@ $(document).ready(function(){
             top: $('#banner').height()
         }   
     });
+    /** JS Menu **/
+    jQuery(document).on('click', '.mega-dropdown', function(e) {
+      e.stopPropagation();
+    });
 });
+

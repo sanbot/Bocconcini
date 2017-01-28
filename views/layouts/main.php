@@ -53,50 +53,183 @@ if(!isset($img)){
             </div>
         </div>
     </div>
+    <nav class="navbar-inverse navbar-bocconcini navbar affix-top" id="topnavbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="<?= Yii::$app->homeUrl ?>">Bocconcini</a>
+            </div>
+
+
+            <div class="collapse navbar-collapse js-navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown mega-dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Collection <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+
+                  <ul class="dropdown-menu mega-dropdown-menu row">
+                    <li class="col-sm-3">
+                      <ul>
+                        <li class="dropdown-header">New in Stores</li>
+                        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                          <div class="carousel-inner">
+                            <div class="item active">
+                              <a href="#"><img src="http://placehold.it/254x150/3498db/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 1"></a>
+                              <h4><small>Summer dress floral prints</small></h4>
+                              <button class="btn btn-primary" type="button">49,99 €</button>
+                              <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                            </div>
+                            <!-- End Item -->
+                            <div class="item">
+                              <a href="#"><img src="http://placehold.it/254x150/ef5e55/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 2"></a>
+                              <h4><small>Gold sandals with shiny touch</small></h4>
+                              <button class="btn btn-primary" type="button">9,99 €</button>
+                              <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                            </div>
+                            <!-- End Item -->
+                            <div class="item">
+                              <a href="#"><img src="http://placehold.it/254x150/2ecc71/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 3"></a>
+                              <h4><small>Denin jacket stamped</small></h4>
+                              <button class="btn btn-primary" type="button">49,99 €</button>
+                              <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                            </div>
+                            <!-- End Item -->
+                          </div>
+                          <!-- End Carousel Inner -->
+                        </div>
+                        <!-- /.carousel -->
+                        <li class="divider"></li>
+                        <li><a href="#">View all Collection <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                      </ul>
+                    </li>
+                    <li class="col-sm-3">
+                      <ul>
+                        <li class="dropdown-header">Dresses</li>
+                        <li><a href="#">Unique Features</a></li>
+                        <li><a href="#">Image Responsive</a></li>
+                        <li><a href="#">Auto Carousel</a></li>
+                        <li><a href="#">Newsletter Form</a></li>
+                        <li><a href="#">Four columns</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Tops</li>
+                        <li><a href="#">Good Typography</a></li>
+                      </ul>
+                    </li>
+                    <li class="col-sm-3">
+                      <ul>
+                        <li class="dropdown-header">Jackets</li>
+                        <li><a href="#">Easy to customize</a></li>
+                        <li><a href="#">Glyphicons</a></li>
+                        <li><a href="#">Pull Right Elements</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Pants</li>
+                        <li><a href="#">Coloured Headers</a></li>
+                        <li><a href="#">Primary Buttons & Default</a></li>
+                        <li><a href="#">Calls to action</a></li>
+                      </ul>
+                    </li>
+                    <li class="col-sm-3">
+                      <ul>
+                        <li class="dropdown-header">Accessories</li>
+                        <li><a href="#">Default Navbar</a></li>
+                        <li><a href="#">Lovely Fonts</a></li>
+                        <li><a href="#">Responsive Dropdown </a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Newsletter</li>
+                        <form class="form" role="form">
+                          <div class="form-group">
+                            <label class="sr-only" for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                          </div>
+                          <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                        </form>
+                      </ul>
+                    </li>
+                  </ul>
+
+                </li>
+              </ul>
+                <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){?> 
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown mega-dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Productos</li>
+                                        <li class="divider"></li>
+                                        <li><?= Html::a('Categorías', ['/productcategory']) ?></li>
+                                        <li><?= Html::a('Productos', ['/product']) ?></li>
+                                        <li><?= Html::a('Imagen de productos', ['/productimage']) ?></li>
+                                        <li><?= Html::a('Descuentos', ['/discount']) ?></li>
+                                        <li><?= Html::a('Productos en Descuento', ['/discountproduct'])?></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Sitio</li>
+                                        <li class="divider"></li>
+                                        <li><?= Html::a('Ubicación Banner', ['/bannerlocation']) ?></li>
+                                        <li><?= Html::a('Banner', ['/banner']) ?></li>
+                                        <li><?= Html::a('Usuarios', ['/users']) ?></li>
+                                        <li><?= Html::a('Roles', ['/role']) ?></li>
+                                        <li><?= Html::a('Direcciones de usuarios', ['/useraddress'])?></li>
+                                        <li><?= Html::a('Departamentos', ['/municipality'])?></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
+                <?php if(!Yii::$app->user->isGuest){?> 
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown mega-dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= Yii::$app->user->identity->name?><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Perfil</li>
+                                        <li class="divider"></li>
+                                        <li><?= Html::a( Yii::$app->user->identity->name, ['/users/profile']) ?></li>
+                                        <li><?= Html::a( 'Modificar Perfil', ['/users/updateprofile']) ?></li>
+                                        <li><?= Html::a( 'Cerrar sesión', ['/users/logout']) ?></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Carrito de compras</li>
+                                        <li class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Favoritos</li>
+                                        <li class="divider"></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
+            </div>
+        </div>
+        <!-- /.nav-collapse -->
+      </nav>
     <?php
     NavBar::begin([
         'brandLabel' => 'Bocconcini',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-bocconcini',
-            'id' => 'topnavbar'
+            'class' => 'navbar-inverse navbar-bocconcini hide',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            Yii::$app->user->isGuest ? (''): Yii::$app->user->identity->roleid == 1 ? ([
-                'label' => 'Productos',
-                'items' => [
-                    ['label' => 'Categorías', 'url' => ['/productcategory']],
-                    ['label' => 'Productos', 'url' => ['/product']],
-                    ['label' => 'Imagen de productos', 'url' => ['/productimage']],
-                    ['label' => 'Descuentos', 'url' => ['/discount']],
-                    ['label' => 'Productos en Descuento', 'url' => ['/discountproduct']],
-                ],
-            ]): (
-                ['label' => 'Productos', 'url' => ['/product']]
-            ),
-            Yii::$app->user->isGuest ? (''): Yii::$app->user->identity->roleid == 1 ? ([
-                'label' => 'Admin',
-                'items' => [
-                    ['label' => 'Ubicación Banner', 'url' => ['/bannerlocation']],
-                    ['label' => 'Banner', 'url' => ['/banner']],
-                    ['label' => 'Usuarios', 'url' => ['/users']],
-                    ['label' => 'Roles', 'url' => ['/role']],
-                    ['label' => 'Direcciones de usuarios', 'url' => ['/useraddress']],
-                    ['label' => 'Departamentos', 'url' => ['/municipality']],
-                ],
-            ]): (''),
-            Yii::$app->user->isGuest ? ('') : ([
-                'label' => Yii::$app->user->identity->name,
-                'items' => [
-                    ['label' => 'Perfil', 'url' => ['/users/profile']],
-                    ['label' => 'Carrito de compras', 'url' => ['/site']],
-                    ['label' => 'Logout', 'url' => ['/site/logout']],
-                ],
-            ])
-        ],
+        'items' => [],
     ]);
     NavBar::end();
     ?>
