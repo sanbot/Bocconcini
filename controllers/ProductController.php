@@ -103,7 +103,7 @@ class ProductController extends Controller {
         $banner = $pi->findImagesProduct($id, $this->findModel($id)->imagen);
         
         $category = new Productcategory();
-        $queryCategory = $category->listParentCategoriesProduct($this->findModel($id)->category);
+        $queryCategory = $category->listCategoriesProduct($this->findModel($id)->category);
         
         $categoryproducts = new Categoryproducts();
         $queryCategoryproducts = $categoryproducts->listCategoryProducts($id);

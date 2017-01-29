@@ -89,8 +89,12 @@ class Productcategory extends \yii\db\ActiveRecord {
                         ->one();
     }
 
-    public function listParentCategoriesProduct($productid) {
+    public function listCategoriesProduct($productid) {
         return Productcategory::find()->where('id <> 1 and id <> ' . $productid)->all();
+    }
+    
+    public function listParentCategories() {
+        return Productcategory::find()->where('id <> 1 and maincategory = 1')->all();
     }
 
 }
