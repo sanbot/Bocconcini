@@ -93,13 +93,66 @@ class Product extends \yii\db\ActiveRecord {
         $query = new Query;
         $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
                 ->from('tblproduct pro')
+                ->join('left join', 'tblcategoryproducts cp', 'cp.productid = pro.id')
                 ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
                 ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate')
-                ->orWhere('pro.name like \'%' . $description . '%\'')
-                ->orWhere('pro.description like \'%' . $description . '%\'');
+                ->where('dis.id is not null or cp.categoryid = 6 or pro.category = 6');
+        if($description != ''){
+            $query = $query->orWhere('pro.name like \'%' . $description . '%\'')
+                        ->orWhere('pro.description like \'%' . $description . '%\'');
+        }
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
+    }
+    
+    public function findProducts($description) {
+        $query = new Query;
+        $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
+                ->distinct()
+                ->from('tblproduct pro')
+                ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
+                ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate');
+        if($description != ''){
+            $query = $query->orWhere('pro.name like \'%' . $description . '%\'')
+                        ->orWhere('pro.description like \'%' . $description . '%\'');
+        }
+        $command = $query->createCommand();
+        $result = $command->queryAll();
+        return $result;
+    }
+    
+    public function findProductsByCategory($description, $categoryid) {
+        $query = new Query;
+        $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
+                ->distinct()
+                ->from('tblproduct pro')
+                ->join('left join', 'tblcategoryproducts cp', 'cp.productid = pro.id')
+                ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
+                ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate')
+                ->orWhere('pro.category = ' . $categoryid)
+                ->orWhere('cp.categoryid = ' . $categoryid);
+        if($description != ''){
+            $query = $query->orWhere('pro.name like \'%' . $description . '%\'')
+                        ->orWhere('pro.description like \'%' . $description . '%\'');
+        }
+        $command = $query->createCommand();
+        $result = $command->queryAll();
+        return $result;
+    }
+    
+    public function findProductsAdmin(){
+        return Product::find()
+                ->joinWith(['productcategory'])
+                ->join('left join', 'tblcategoryproducts', 'tblcategoryproducts.productid = tblproduct.id');
+    }
+    
+    public function findProductsAdminByCategory($categoryid){
+        return Product::find()->distinct()
+                ->joinWith(['productcategory'])
+                ->join('left join', 'tblcategoryproducts', 'tblcategoryproducts.productid = tblproduct.id')
+                ->orWhere('tblproduct.category = ' . $categoryid)
+                ->orWhere('tblcategoryproducts.categoryid = ' . $categoryid);
     }
     
     public function listProducts(){

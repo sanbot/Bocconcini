@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $PT;
     
     <div class="row">
         <div class="productimage-form">
-            <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=product']); ?>
+            <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r='.$action]); ?>
                 <div class="col-md-8">
                     <?= $form->field($model, 'description')->textInput()->label('Buscar') ?>
                 </div>

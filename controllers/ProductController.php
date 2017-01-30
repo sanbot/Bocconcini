@@ -34,16 +34,16 @@ class ProductController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'searchbycategory'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
+                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'searchbycategory'],
                         'roles' => ['@'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view', 'index'],
+                        'actions' => ['view', 'index', 'searchbycategory'],
                         'roles' => ['?'],
                     ],
                 ],
@@ -56,11 +56,10 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-
+        $action = 'product';
         $model = new Product();
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) {
-            $query = Product::find();
-            $query->joinWith(['productcategory']);
+            $query = $model->findProductsAdmin();
 
             if ($model->load(Yii::$app->request->post())) {
                 $query->orWhere('tblproduct.name like \'%' . $model->description . '%\'');
@@ -74,17 +73,54 @@ class ProductController extends Controller {
             return $this->render('index', [
                         'dataProvider' => $dataProvider,
                         'model' => $model,
+                        'action' => $action,
             ]);
         } else {
             if ($model->load(Yii::$app->request->post())) {
-                $products = $model->findProductsHomePage($model->description);
+                $products = $model->findProducts($model->description);
             } else {
-                $products = $model->findProductsHomePage('');
+                $products = $model->findProducts('');
             }
 
             return $this->render('main', [
                         'model' => $model,
                         'products' => $products,
+                        'action' => $action,
+            ]);
+        }
+    }
+    
+    public function actionSearchbycategory($categoryid) {
+        $action = 'product/searchbycategory&categoryid='.$categoryid;
+        $model = new Product();
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) {
+            $query = $model->findProductsAdminByCategory($categoryid);
+
+            if ($model->load(Yii::$app->request->post())) {
+                $query->orWhere('tblproduct.name like \'%' . $model->description . '%\'');
+                $query->orWhere('tblproduct.description like \'%' . $model->description . '%\'');
+            }
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+
+            return $this->render('index', [
+                        'dataProvider' => $dataProvider,
+                        'model' => $model,
+                        'action' => $action,
+            ]);
+        } else {
+            if ($model->load(Yii::$app->request->post())) {
+                $products = $model->findProductsByCategory($model->description, $categoryid);
+            } else {
+                $products = $model->findProductsByCategory('', $categoryid);
+            }
+
+            return $this->render('main', [
+                        'model' => $model,
+                        'products' => $products,
+                        'action' => $action,
             ]);
         }
     }
