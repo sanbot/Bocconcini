@@ -92,7 +92,7 @@ $categories = $categoriesproduct->listParentCategories();
                         </div>
                         <!-- /.carousel -->
                         <li class="divider"></li>
-                        <li><a href="#">Ver <?= $category->name ?> <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        <li><a href="<?= BaseUrl::base().'/index.php?r=product/searchbycategory&categoryid='.$category->id ?>">Ver <?= $category->name ?> <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
                       </ul>
                     </li>
                     <?php }?>
@@ -143,7 +143,7 @@ $categories = $categoriesproduct->listParentCategories();
                                         <li class="divider"></li>
                                         <li><?= Html::a( Yii::$app->user->identity->name, ['/users/profile']) ?></li>
                                         <li><?= Html::a( 'Modificar Perfil', ['/users/updateprofile']) ?></li>
-                                        <li><?= Html::a( 'Cerrar sesión', ['/users/logout']) ?></li>
+                                        <li><?= Html::a( 'Cerrar sesión', ['/site/logout']) ?></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
@@ -160,6 +160,10 @@ $categories = $categoriesproduct->listParentCategories();
                                 </li>
                             </ul>
                         </li>
+                    </ul>
+                <?php }else{ ?>
+                    <ul class="nav navbar-nav pull-right">
+                        <li><?= Html::a('Productos', ['/product']) ?></li>
                     </ul>
                 <?php } ?>
             </div>
