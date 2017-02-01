@@ -34,7 +34,12 @@ class FavoriteController extends Controller {
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'add', 'remove'],
+                        'actions' => ['add', 'remove'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
+                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'roles' => ['@'],
                     ],
                 ],

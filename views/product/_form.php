@@ -25,6 +25,17 @@ use yii\helpers\ArrayHelper;
             <?= $form->field($model, 'price')->textInput() ?>
         </div>
         <div class="col-md-6">
+            <?= $form->field($model, 'cost')->textInput() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'minage')->textInput(['min'=>0]) ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'maxage')->textInput(['min'=>0]) ?>
+        </div>
+        <div class="col-md-6">
             <?= $form->field($model, 'imageFile')->fileInput() ?>
         </div>
     </div>

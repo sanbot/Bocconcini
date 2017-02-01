@@ -81,6 +81,11 @@ $formatter = \Yii::$app->formatter;
                             <p class="label-price">$ <?= $formatter->asDecimal($model->price) ?></p>
                         </div>
                     </div>
+                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){ ?> 
+                    <div class="row"><div class="col-md-12"><p class="item-label"><b>Costo</b></p><p class="item-value">$ <?= $model->cost?></p></div></div>
+                    <div class="row"><div class="col-md-12"><p class="item-label"><b>Edad Mínima</b></p><p class="item-value"><?= $model->minage?></p></div></div>
+                    <div class="row"><div class="col-md-12"><p class="item-label"><b>Edad Máxima</b></p><p class="item-value"><?= $model->maxage?></p></div></div>
+                    <?php } ?>
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [

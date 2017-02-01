@@ -37,8 +37,13 @@ class ProductController extends Controller {
                 'only' => ['index', 'create', 'update', 'view', 'delete', 'searchbycategory'],
                 'rules' => [
                     [
+                        'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
+                        'actions' => ['create', 'update', 'delete'],
+                        'roles' => ['@'],
+                    ],
+                    [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'searchbycategory'],
+                        'actions' => ['index', 'view', 'searchbycategory'],
                         'roles' => ['@'],
                     ],
                     [

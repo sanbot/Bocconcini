@@ -33,7 +33,7 @@ class DiscountController extends Controller {
                 'only' => ['index', 'create', 'update', 'view', 'delete'],
                 'rules' => [
                     [
-                        'allow' => true,
+                        'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
                         'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'roles' => ['@'],
                     ],

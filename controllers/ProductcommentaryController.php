@@ -33,8 +33,13 @@ class ProductcommentaryController extends Controller {
                 'only' => ['index', 'create', 'update', 'view', 'delete', 'add', 'showcomments'],
                 'rules' => [
                     [
+                        'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
+                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'roles' => ['@'],
+                    ],
+                    [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'add', 'showcomments'],
+                        'actions' => ['add', 'showcomments'],
                         'roles' => ['@'],
                     ],
                     [

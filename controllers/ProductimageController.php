@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\models\Product;
+use yii\filters\AccessControl;
 
 /**
  * ProductimageController implements the CRUD actions for Productimage model.
@@ -25,6 +26,17 @@ class ProductimageController extends Controller {
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
+                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

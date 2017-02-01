@@ -109,7 +109,8 @@ $cantpro = 1;
                     <ul class="nav navbar-nav pull-right">
                         <li class="dropdown mega-dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= Yii::$app->user->identity->name?><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
-                            <ul class="dropdown-menu mega-dropdown-menu row">
+                            <ul class="dropdown-menu mega-dropdown-menu">
+                                <div class="row">
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">Perfil</li>
@@ -127,6 +128,7 @@ $cantpro = 1;
                                         <li class="divider"></li>
                                     </ul>
                                 </li>
+                                </div>
                             </ul>
                         </li>
                     </ul>
@@ -143,15 +145,16 @@ $cantpro = 1;
                         <li class="dropdown mega-dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
                             <ul class="dropdown-menu mega-dropdown-menu row">
+                                <div class="row">
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">Productos</li>
                                         <li class="divider"></li>
-                                        <li><?= Html::a('Categorías', ['/productcategory']) ?></li>
-                                        <li><?= Html::a('Productos', ['/product']) ?></li>
-                                        <li><?= Html::a('Imagen de productos', ['/productimage']) ?></li>
-                                        <li><?= Html::a('Descuentos', ['/discount']) ?></li>
-                                        <li><?= Html::a('Productos en Descuento', ['/discountproduct'])?></li>
+                                        <li style="text-align: left;"><?= Html::a('Categorías', ['/productcategory']) ?></li>
+                                        <li style="text-align: left;"><?= Html::a('Productos', ['/product']) ?></li>
+                                        <li style="text-align: left;"><?= Html::a('Imagen de productos', ['/productimage']) ?></li>
+                                        <li style="text-align: left;"><?= Html::a('Descuentos', ['/discount']) ?></li>
+                                        <li style="text-align: left;"><?= Html::a('Productos en Descuento', ['/discountproduct'])?></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
@@ -166,6 +169,7 @@ $cantpro = 1;
                                         <li><?= Html::a('Departamentos', ['/municipality'])?></li>
                                     </ul>
                                 </li>
+                                </div>
                             </ul>
                         </li>
                     </ul>
