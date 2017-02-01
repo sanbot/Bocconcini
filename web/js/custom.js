@@ -14,5 +14,9 @@ $(document).ready(function(){
     jQuery(document).on('click', '.mega-dropdown', function(e) {
       e.stopPropagation();
     });
+    $('.banner-img-product').click(function(){
+        $('#img-modal').attr('src', $(this).data('url'));
+        $('#modal-container-26505').modal('show');
+    });
 });
 

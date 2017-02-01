@@ -34,6 +34,14 @@ $formatter = \Yii::$app->formatter;
                             <div class="col-md-10 col-md-offset-1">
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <p class="pull-right">
+                                            <a href="#" class="heart-favorite" title="Agregar al carro de compras"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a> 
+                                            <?php if(!Yii::$app->user->isGuest){?> <a href="<?= BaseUrl::base() . '/index.php?r=favorite/add&productid=' . $product['id'] ?>" class="heart-favorite" title="Agregar a favoritos"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a> <?php } ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <p><a href="<?= BaseUrl::base().'/index.php?r=product%2Fview&id='.$product['id']?>" class="label-linkproduct"><?= $product['name']?></a></p>
                                     </div>
                                 </div>

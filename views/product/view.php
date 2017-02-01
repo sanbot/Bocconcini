@@ -95,17 +95,24 @@ $formatter = \Yii::$app->formatter;
             </div>
             <br>
             <div class="row">
-                <div class="col-md-3 col-md-offset-3">
+                <div class="col-md-2 col-md-offset-3">
                     <div class="form-group">
                         <label class="control-label" for="cantidad">Cantidad</label>
                         <input type="number" class="form-control" name="cantidad" min="0" max="100"/>
                     </div>
                 </div>
-                <div class="col-md-3">  
+                <div class="col-md-2">  
                     <br>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block">Comprar</button>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <br>
+                    <p class="pull-left">
+                        <a href="#" class="heart-favorite" title="Agregar al carro de compras"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a> 
+                        <?php if(!Yii::$app->user->isGuest){?> <a href="<?= BaseUrl::base() . '/index.php?r=favorite/add&productid=' . $model->id ?>" class="heart-favorite" title="Agregar a favoritos"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a> <?php } ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -213,5 +220,31 @@ $formatter = \Yii::$app->formatter;
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal fade" id="modal-container-26505" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
 
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                <?= $model->name ?>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <img id="img-modal" src="#" class="img-responsive"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cerrar
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

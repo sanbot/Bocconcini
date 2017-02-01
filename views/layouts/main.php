@@ -80,7 +80,8 @@ $categories = $categoriesproduct->listParentCategories();
                     <?php foreach($categories as $category){ ?>
                     <li class="col-sm-2">
                       <ul>
-                        <li class="dropdown-header"><?= $category->name ?></li>
+                          <li class="dropdown-header"><a href="<?= BaseUrl::base().'/index.php?r=product/searchbycategory&categoryid='.$category->id ?>"><?= $category->name ?></a></li>
+                          <li class="divider"></li>
                         <div id="myCarousel" class="carousel slide <?= (empty($category->imagen)) ? 'hide' : '' ?>" data-ride="carousel">
                           <div class="carousel-inner">
                             <div class="item active">
@@ -91,8 +92,7 @@ $categories = $categoriesproduct->listParentCategories();
                           <!-- End Carousel Inner -->
                         </div>
                         <!-- /.carousel -->
-                        <li class="divider"></li>
-                        <li><a href="<?= BaseUrl::base().'/index.php?r=product/searchbycategory&categoryid='.$category->id ?>">Ver <?= $category->name ?> <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        
                       </ul>
                     </li>
                     <?php }?>
@@ -100,6 +100,41 @@ $categories = $categoriesproduct->listParentCategories();
 
                 </li>
               </ul>
+                <?php if(!Yii::$app->user->isGuest){?> 
+                    
+                    
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown mega-dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= Yii::$app->user->identity->name?><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Perfil</li>
+                                        <li class="divider"></li>
+                                        <li><?= Html::a( Yii::$app->user->identity->name, ['/users/profile']) ?></li>
+                                        <li><?= Html::a( 'Modificar Perfil', ['/users/updateprofile']) ?></li>
+                                        <li><?= Html::a( 'Cerrar sesión', ['/site/logout']) ?></li>
+                                        <li class="divider"></li>
+                                        <li><?= Html::a( 'Favoritos', ['/favorite']) ?></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Carrito de compras</li>
+                                        <li class="divider"></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        <li><?= Html::a('Productos', ['/product']) ?></li>
+                    </ul>
+                <?php }else{ ?>
+                    <ul class="nav navbar-nav pull-right">
+                        <li><?= Html::a('Productos', ['/product']) ?></li>
+                    </ul>
+                <?php } ?>
                 <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){?> 
                     <ul class="nav navbar-nav pull-right">
                         <li class="dropdown mega-dropdown">
@@ -132,40 +167,7 @@ $categories = $categoriesproduct->listParentCategories();
                         </li>
                     </ul>
                 <?php } ?>
-                <?php if(!Yii::$app->user->isGuest){?> 
-                    <ul class="nav navbar-nav pull-right">
-                        <li class="dropdown mega-dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= Yii::$app->user->identity->name?><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
-                            <ul class="dropdown-menu mega-dropdown-menu row">
-                                <li class="col-sm-3">
-                                    <ul>
-                                        <li class="dropdown-header">Perfil</li>
-                                        <li class="divider"></li>
-                                        <li><?= Html::a( Yii::$app->user->identity->name, ['/users/profile']) ?></li>
-                                        <li><?= Html::a( 'Modificar Perfil', ['/users/updateprofile']) ?></li>
-                                        <li><?= Html::a( 'Cerrar sesión', ['/site/logout']) ?></li>
-                                    </ul>
-                                </li>
-                                <li class="col-sm-3">
-                                    <ul>
-                                        <li class="dropdown-header">Carrito de compras</li>
-                                        <li class="divider"></li>
-                                    </ul>
-                                </li>
-                                <li class="col-sm-3">
-                                    <ul>
-                                        <li class="dropdown-header">Favoritos</li>
-                                        <li class="divider"></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                <?php }else{ ?>
-                    <ul class="nav navbar-nav pull-right">
-                        <li><?= Html::a('Productos', ['/product']) ?></li>
-                    </ul>
-                <?php } ?>
+                
             </div>
         </div>
         <!-- /.nav-collapse -->

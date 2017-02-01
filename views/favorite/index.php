@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\BaseUrl;
 
 $this->title = 'Bocconcini';
-$PT = 'Favoritos';
+$PT = 'Productos';
 $formatter = \Yii::$app->formatter;
 ?>
 <div class="product-main">
@@ -21,10 +21,25 @@ $formatter = \Yii::$app->formatter;
                     <div class="col-md-2">
                         <br>
                         <div class="form-group">
-                            <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary btn-block']) ?>
+                            <?= Html::submitButton('Search', ['class' => 'btn btn-primary btn-block']) ?>
                         </div>
                     </div>
                 <?php ActiveForm::end(); ?>
+            </div>
+        </div>
+         
+        <div class="row">
+            <div class="col-md-12">
+                <?php if(Yii::$app->session->getFlash('success_favorite') != null){?>
+                <div class="alert alert-success"><?= Yii::$app->session->getFlash('success_favorite') ?></div>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?php if(Yii::$app->session->getFlash('error_favorite') != null){?>
+                <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error_favorite') ?></div>
+                <?php } ?>
             </div>
         </div>
         <div class="row">
@@ -45,7 +60,7 @@ $formatter = \Yii::$app->formatter;
                                 <div class="col-md-12">
                                     <p class="pull-right">
                                         <a href="#" class="heart-favorite" title="Agregar al carro de compras"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a> 
-                                        <?php if(!Yii::$app->user->isGuest){?> <a href="<?= BaseUrl::base() . '/index.php?r=favorite/add&productid=' . $product['id'] ?>" class="heart-favorite" title="Agregar a favoritos"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a> <?php } ?>
+                                        <?php if(!Yii::$app->user->isGuest){?> <a href="<?= BaseUrl::base() . '/index.php?r=favorite/remove&productid=' . $product['id'] ?>" class="heart-favorite" title="Reemover de favoritos"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a> <?php } ?>
                                     </p>
                                 </div>
                             </div>

@@ -160,5 +160,22 @@ class Product extends \yii\db\ActiveRecord {
                 ->join('left join' , 'tbldiscountproduct', 'tblproduct.id = tbldiscountproduct.prductid')
                 ->where('tbldiscountproduct.prductid is null')->all();
     }
+    
+    public function listFavotiteProduct($userid, $description){
+        $query = new Query;
+        $query->select("pro.id, pro.name, pro.imagen, pro.description, pro.category, pro.price, if(dis.percent is null, pro.price, pro.price * (1- (dis.percent / 100)))  as discount ")
+                ->from('tblproduct pro')
+                ->join('join', 'tblfavorite fav', 'fav.productid = pro.id AND fav.userid = ' . $userid)
+                ->join('left join', 'tblcategoryproducts cp', 'cp.productid = pro.id')
+                ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
+                ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate');
+        if($description != ''){
+            $query = $query->orWhere('pro.name like \'%' . $description . '%\'')
+                        ->orWhere('pro.description like \'%' . $description . '%\'');
+        }
+        $command = $query->createCommand();
+        $result = $command->queryAll();
+        return $result;
+    }
 
 }
