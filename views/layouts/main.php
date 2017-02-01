@@ -21,6 +21,7 @@ if(!isset($img)){
 }
 $categoriesproduct = new Productcategory();
 $categories = $categoriesproduct->listParentCategories();
+$cantpro = 1;
 ?>
 
 <?php $this->beginPage() ?>
@@ -75,9 +76,10 @@ $categories = $categoriesproduct->listParentCategories();
                 <li class="dropdown mega-dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Catalogo<span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
 
-                  <ul class="dropdown-menu mega-dropdown-menu row">
-                      <li class="col-sm-1"></li>
+                  <ul class="dropdown-menu mega-dropdown-menu">
+                      
                     <?php foreach($categories as $category){ ?>
+                      <?php if($cantpro == 1 ) { ?> <div class="row"><li class="col-sm-1"></li><?php } ?>
                     <li class="col-sm-2">
                       <ul>
                           <li class="dropdown-header"><a href="<?= BaseUrl::base().'/index.php?r=product/searchbycategory&categoryid='.$category->id ?>"><?= $category->name ?></a></li>
@@ -95,6 +97,7 @@ $categories = $categoriesproduct->listParentCategories();
                         
                       </ul>
                     </li>
+                    <?php if($cantpro == 5) { ?> </div><?php $cantpro = 0;} $cantpro++; ?>
                     <?php }?>
                   </ul>
 
