@@ -16,6 +16,7 @@ use Yii;
  */
 class Inventory extends \yii\db\ActiveRecord {
 
+    public $excelFile;
     /**
      * @inheritdoc
      */
@@ -32,6 +33,7 @@ class Inventory extends \yii\db\ActiveRecord {
             [['productid', 'quantity'], 'integer'],
             [['observation'], 'string', 'max' => 150],
             [['productid'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productid' => 'id']],
+            [['excelFile'], 'file', 'extensions' => 'xlsx'],
         ];
     }
 
@@ -44,6 +46,7 @@ class Inventory extends \yii\db\ActiveRecord {
             'productid' => 'Producto',
             'quantity' => 'Cantidad',
             'observation' => 'Observación',
+            'excelFile' => 'Inventario Excel',
         ];
     }
 
@@ -52,6 +55,11 @@ class Inventory extends \yii\db\ActiveRecord {
      */
     public function getProduct() {
         return $this->hasOne(Product::className(), ['id' => 'productid']);
+    }
+    
+    public function upload() {
+        $this->excelFile->saveAs('uploads/inventory/BocconciniInventory.' . $this->excelFile->extension);
+        return 'uploads/inventory/BocconciniInventory.' . $this->excelFile->extension;
     }
 
     public function findModelInventory($id){
@@ -65,5 +73,13 @@ class Inventory extends \yii\db\ActiveRecord {
         return Inventory::find()
                 ->where(['tblinventory.productid' => $id])
                 ->one();
+    }
+    
+    public function getInventory(){
+        return Product::find()
+                ->select('tblproduct.id, tblproduct.name, tblinventory.quantity, tblproduct.cost, tblproduct.price, tblinventory.observation')
+                ->join('LEFT JOIN', 'tblinventory', 'tblinventory.productid = tblproduct.id')
+                ->asArray()
+                ->all();
     }
 }

@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $PT;
 
     <p>
         <?= Html::a('Crear', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Descargar inventario', ['downloadinventory'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Cargar inventario', ['uploadinventory'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

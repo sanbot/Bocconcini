@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Product;
+use yii\web\UploadedFile;
 
 /**
  * InventoryController implements the CRUD actions for Inventory model.
@@ -29,16 +30,100 @@ class InventoryController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory'],
                 'rules' => [
                     [
                         'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory'],
                         'roles' => ['@'],
                     ],
                 ],
             ],
         ];
+    }
+    
+    public function actionDownloadinventory(){
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Bocconcini Application")
+                ->setLastModifiedBy("Bocconcini Application")
+                ->setTitle("Bocconcini - Inventory")
+                ->setSubject("Bocconcini - Inventory")
+                ->setDescription("Bocconcini - Inventory");
+        
+        $inv = new Inventory();
+        $data = $inv->getInventory();
+        $row = 1;
+        
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->SetCellValue('A'.$row, 'Código');
+        $sheet->SetCellValue('B'.$row, 'Nombre');
+        $sheet->SetCellValue('C'.$row, 'Disponible');
+        $sheet->SetCellValue('D'.$row, 'Precio Compra');
+        $sheet->SetCellValue('E'.$row, 'Precio Venta');
+        $sheet->SetCellValue('F'.$row, 'Observaciones');
+        $row++;
+        foreach($data as $model){
+            
+            $sheet->SetCellValue('A'.$row, $model['id']);
+            $sheet->SetCellValue('B'.$row, $model['name']);
+            $sheet->SetCellValue('C'.$row, $model['quantity']);
+            $sheet->SetCellValue('D'.$row, $model['cost']);
+            $sheet->SetCellValue('E'.$row, $model['price']);
+            $sheet->SetCellValue('F'.$row, $model['observation']);
+            $row++;
+        }
+        
+        foreach(range('A','F') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+        $sheet->setTitle('Inventario');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Bocconcini Inventory.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+    }
+    
+    public function actionUploadinventory(){
+        $model = new Inventory();
+        if ($model->load(Yii::$app->request->post())) {
+             $model->excelFile = UploadedFile::getInstance($model, 'excelFile');
+             if ($model->upload()) {
+                $objPHPExcel = \PHPExcel_IOFactory::load('./uploads/inventory/BocconciniInventory.xlsx');
+                $sheet =  $objPHPExcel->getActiveSheet();
+                $endRows = $sheet->getHighestRow();
+                for ($row = 2; $row < $endRows; $row++) {
+                    $inv = new Inventory();
+                    $model = $inv->findModelByProduct((int)$sheet->getCell('A'.$row)->getValue());
+                    if(!empty($model) && !is_null($model)){
+                        $model->quantity = (int)$sheet->getCell('C'.$row)->getValue();
+                        $model->observation = $sheet->getCell('F'.$row)->getValue();
+                        $model->save();
+                    }else{
+                        $inv->productid = (int)$sheet->getCell('A'.$row)->getValue();
+                        $inv->quantity = (int)$sheet->getCell('C'.$row)->getValue();
+                        $inv->observation = $sheet->getCell('F'.$row)->getValue();
+                        $inv->save();
+                    }
+                    $product = Product::findOne((int)$sheet->getCell('A'.$row)->getValue());
+                    
+                    if(!empty($product) && !is_null($product)){
+                        $product->name = $sheet->getCell('B'.$row)->getValue();
+                        $product->cost = (double)$sheet->getCell('D'.$row)->getValue();
+                        $product->price = (double)$sheet->getCell('E'.$row)->getValue();
+                        $product->save();
+                    }
+                    
+                }
+             }
+            return $this->redirect(['index']);
+        }else{
+            return $this->render('upload', [
+                        'model' => $model,
+            ]);
+        }
     }
 
     /**
