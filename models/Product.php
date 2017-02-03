@@ -106,6 +106,13 @@ class Product extends \yii\db\ActiveRecord {
     public function getProductcommentaries() {
         return $this->hasMany(Tblproductcommentary::className(), ['productid' => 'id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTblinventories() {
+        return $this->hasMany(Inventory::className(), ['productid' => 'id']);
+    }
 
     public function upload($name) {
         $this->imageFile->saveAs('uploads/products/' . $name . '.' . $this->imageFile->extension);

@@ -240,7 +240,10 @@ $formatter = \Yii::$app->formatter;
                             </h4>
                         </div>
                         <div class="modal-body">
-                            <img id="img-modal" src="#" class="img-responsive"/>
+                            <?= Carousel::widget([
+                                    'items' => $banner
+                                ]);
+                            ?>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">

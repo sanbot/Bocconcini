@@ -15,7 +15,6 @@ $(document).ready(function(){
       e.stopPropagation();
     });
     $('.banner-img-product').click(function(){
-        $('#img-modal').attr('src', $(this).data('url'));
         $('#modal-container-26505').modal('show');
     });
 });

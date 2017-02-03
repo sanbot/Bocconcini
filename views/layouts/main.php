@@ -155,6 +155,8 @@ $cantpro = 1;
                                         <li style="text-align: left;"><?= Html::a('Imagen de productos', ['/productimage']) ?></li>
                                         <li style="text-align: left;"><?= Html::a('Descuentos', ['/discount']) ?></li>
                                         <li style="text-align: left;"><?= Html::a('Productos en Descuento', ['/discountproduct'])?></li>
+                                        <li class="divider"></li>
+                                        <li style="text-align: left;"><?= Html::a('Inventario', ['/inventory'])?></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">

@@ -78,9 +78,9 @@ class Productimage extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         $data = array();
-        array_push($data, '<img class="banner-img-product" src="'. BaseUrl::base().'/uploads/products/'.$id.'.'.$ext.'" data-url="'. BaseUrl::base().'/uploads/products/'.$id.'.'.$ext.'" width="100%"/>');
+        array_push($data, '<img class="banner-img-product" src="'. BaseUrl::base().'/uploads/products/'.$id.'.'.$ext.'"  width="100%"/>');
         foreach($result as $row){
-            array_push($data, '<img class="banner-img-product" src="'. BaseUrl::base().'/uploads/products/'.$row['productid'].'/'.$row['id'].'.'.$row['ext'].'" data-url="'. BaseUrl::base().'/uploads/products/'.$row['productid'].'/'.$row['id'].'.'.$row['ext'].'" width="100%"/>');
+            array_push($data, '<img class="banner-img-product" src="'. BaseUrl::base().'/uploads/products/'.$row['productid'].'/'.$row['id'].'.'.$row['ext'].'" width="100%"/>');
         }
 
         return $data;
