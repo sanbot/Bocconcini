@@ -41,7 +41,7 @@ class Product extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'price', 'imagen', 'category'], 'required'],
+            [['name', 'price', 'imagen', 'category','minage', 'maxage', 'cost'], 'required'],
             [['price', 'cost'], 'number', 'min' => 1, 'tooSmall' => 'No puede ser menor 1.'],
             [['category', 'minage', 'maxage'], 'integer'],
             [['name'], 'string', 'max' => 150],
@@ -130,7 +130,8 @@ class Product extends \yii\db\ActiveRecord {
                 ->join('left join', 'tblcategoryproducts cp', 'cp.productid = pro.id')
                 ->join('left join', 'tbldiscountproduct dispro', 'dispro.prductid = pro.id')
                 ->join('left join', 'tbldiscount dis', 'dispro.discountid = dis.id and curdate() between dis.initialdate and dis.finaldate')
-                ->where('dis.id is not null or cp.categoryid = 6 or pro.category = 6');
+                ->where('dis.id is not null or cp.categoryid = 6 or pro.category = 6')
+                ->orderBy('pro.id desc');
         if ($description != '') {
             $query = $query->orWhere('pro.name like \'%' . $description . '%\'')
                     ->orWhere('pro.description like \'%' . $description . '%\'');
