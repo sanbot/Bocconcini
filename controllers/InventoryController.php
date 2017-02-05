@@ -26,15 +26,16 @@ class InventoryController extends Controller {
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'quantitybyproduct' => ['POST'],
                 ],
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory', 'quantitybyproduct'],
                 'rules' => [
                     [
                         'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
-                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory'],
+                        'actions' => ['index', 'create', 'update', 'view', 'delete', 'downloadinventory', 'uploadinventory', 'quantitybyproduct'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -160,6 +161,11 @@ class InventoryController extends Controller {
      */
     public function actionCreate() {
         $model = new Inventory();
+        $query = Inventory::find()
+                ->joinWith(['product']);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         if ($model->load(Yii::$app->request->post())) {
             $aux = $model->findModelByProduct($model->productid);
@@ -177,8 +183,27 @@ class InventoryController extends Controller {
             return $this->render('create', [
                         'model' => $model,
                         'queryProduct' => $queryProduct,
+                        'dataProvider' => $dataProvider,
             ]);
         }
+    }
+    
+    public function actionSet() {
+        $model = new Inventory();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $aux = $model->findModelByProduct($model->productid);
+            if(empty($aux) || is_null($aux)){
+                $model->save();
+            }else{
+                $aux->quantity = $model->quantity;
+                $aux->observation = $model->observation;
+                $model->id = $aux->id;
+                $aux->save();
+            }
+            return $this->redirect(['product/view', 'id' => $model->productid]);
+        } 
+        return $this->redirect(['product/view', 'id' => $model->productid]);
     }
 
     /**
@@ -213,6 +238,27 @@ class InventoryController extends Controller {
         $model->observation = '';
         $model->save();
         return $this->redirect(['view', 'id'=>$model->id]);
+    }
+    
+    public function actionQuantitybyproduct(){
+        $resp = new \stdClass();
+        if(isset($_POST['productid']) && !empty($_POST['productid']) && !is_null($_POST['productid'])){
+            $model = new Inventory();
+            $aux = $model->findModelByProduct($_POST['productid']);
+            $resp->error = false;
+            if(!empty($aux) && !is_null($aux)){
+                $resp->quantity = $aux->quantity;
+                $resp->observation = $aux->observation;
+            }else{
+                $resp->quantity = 0;
+                $resp->observation = '';
+            }
+            return json_encode($resp);
+        }else{
+            $resp->error = true;
+            $resp->message = 'Se esperaba el parametro productid';
+        }
+        return json_encode($resp);
     }
 
     /**

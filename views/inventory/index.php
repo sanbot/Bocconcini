@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $PT;
     <h1><?= Html::encode($PT) ?></h1>
 
     <p>
-        <?= Html::a('Crear', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Cambiar inventario de producto', ['create'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Descargar inventario', ['downloadinventory'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Cargar inventario', ['uploadinventory'], ['class' => 'btn btn-primary']) ?>
     </p>

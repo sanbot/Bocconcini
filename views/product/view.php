@@ -82,6 +82,7 @@ $formatter = \Yii::$app->formatter;
                         </div>
                     </div>
                     <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){ ?> 
+                    <div class="row"><div class="col-md-12"><p class="item-label"><b>Código Único</b></p><p class="item-value"><?= $model->code?></p></div></div>
                     <div class="row"><div class="col-md-12"><p class="item-label"><b>Costo</b></p><p class="item-value">$ <?= $model->cost?></p></div></div>
                     <div class="row"><div class="col-md-12"><p class="item-label"><b>Edad Mínima</b></p><p class="item-value"><?= $model->minage?></p></div></div>
                     <div class="row"><div class="col-md-12"><p class="item-label"><b>Edad Máxima</b></p><p class="item-value"><?= $model->maxage?></p></div></div>
@@ -126,6 +127,37 @@ $formatter = \Yii::$app->formatter;
     <br><br>
     
     <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1) { ?>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 bocconcini-product">
+            <div class="row">
+                <div class="col-md-12"><h3 class="center">Inventario</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=inventory/set']); ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $form->field($modelInventory, 'quantity')->textInput() ?>
+                            </div>
+                            <div class="hidden">
+                                <?= $form->field($modelInventory, 'productid')->input('text', ['value' => $model->id]) ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= $form->field($modelInventory, 'observation')->textInput() ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <label></label>
+                                <?= Html::submitButton('Inventario', ['class' => 'btn btn-primary btn-block']) ?>
+                            </div>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="row">
         <div class="col-md-10 col-md-offset-1 bocconcini-product">
             <div class="row">

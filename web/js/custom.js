@@ -17,5 +17,24 @@ $(document).ready(function(){
     $('.banner-img-product').click(function(){
         $('#modal-container-26505').modal('show');
     });
+    
+    /** JS INVENTORY **/
+    $('#inventory-productid').change(function(){
+        $.ajax({
+            url: URL_INVENTORY_QUANTITY,
+            type: 'POST',
+            data: {productid:$(this).val()},
+            success: function(data){
+                data = jQuery.parseJSON(data);
+                if(data.error){
+                    console.log(data);
+                }else{
+                    $('#inventory-quantity').val(data.quantity);
+                    $('#inventory-observation').val(data.observation);
+                    $('#inventory-quantity').focus();
+                }
+            }
+        });
+    });
 });
 

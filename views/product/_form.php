@@ -34,8 +34,11 @@ use yii\helpers\ArrayHelper;
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'maxage')->textInput(['min'=>0]) ?>
+        </div>        
+        <div class="col-md-3">
+            <?= $form->field($model, 'code')->textInput(['min'=>0]) ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <?= $form->field($model, 'imageFile')->fileInput() ?>
         </div>
     </div>

@@ -17,6 +17,7 @@ use yii\db\Query;
  * @property double $cost
  * @property integer $minage
  * @property integer $maxage
+ * @property integer $code
  *
  * @property Tblcategoryproducts[] $tblcategoryproducts
  * @property Tbldiscountproduct[] $tbldiscountproducts
@@ -41,16 +42,17 @@ class Product extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'price', 'imagen', 'category','minage', 'maxage', 'cost'], 'required'],
+            [['name', 'price', 'imagen', 'category', 'minage', 'maxage', 'cost'], 'required'],
             [['price', 'cost'], 'number', 'min' => 1, 'tooSmall' => 'No puede ser menor 1.'],
-            [['category', 'minage', 'maxage'], 'integer'],
+            [['category', 'minage', 'maxage', 'code'], 'integer'],
             [['name'], 'string', 'max' => 150],
             [['imagen'], 'string', 'max' => 10],
             [['description'], 'string', 'max' => 700],
             [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Productcategory::className(), 'targetAttribute' => ['category' => 'id']],
             [['imageFile'], 'file', 'extensions' => 'png, jpg'],
             ['discount', 'safe'],
-            [['minage', 'maxage'], 'number','min'=>1, 'max'=>100,'tooSmall'=>'No puede seleccionar una edad menor a 1.', 'tooBig'=>'No puede seleccionar una edad mayor a 100.'],
+            [['code'], 'unique'],
+            [['minage', 'maxage'], 'number', 'min' => 1, 'max' => 100, 'tooSmall' => 'No puede seleccionar una edad menor a 1.', 'tooBig' => 'No puede seleccionar una edad mayor a 100.'],
             ['minage', 'compare', 'compareAttribute' => 'maxage', 'operator' => '<', 'message' => 'La edad mínima debe ser menor a la edad máxima.'],
         ];
     }
@@ -69,6 +71,7 @@ class Product extends \yii\db\ActiveRecord {
             'cost' => 'Costo',
             'minage' => 'Edad Mínima',
             'maxage' => 'Edad Máxima',
+            'code' => 'Código Único',
         ];
     }
 
@@ -106,7 +109,7 @@ class Product extends \yii\db\ActiveRecord {
     public function getProductcommentaries() {
         return $this->hasMany(Tblproductcommentary::className(), ['productid' => 'id']);
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -211,6 +214,25 @@ class Product extends \yii\db\ActiveRecord {
         $command = $query->createCommand();
         $result = $command->queryAll();
         return $result;
+    }
+
+    public function productList($q = null, $id = null) {
+        
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                    ->from('tblproduct')
+                    ->where(['like', 'name', $q])
+                    ->orWhere(['like', 'code', $q])
+                    ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        } elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Product::find($id)->name];
+        }
+        return $out;
     }
 
 }

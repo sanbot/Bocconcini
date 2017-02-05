@@ -15,6 +15,8 @@ use app\models\Productimage;
 use app\models\Categoryproducts;
 use app\models\Discount;
 use app\models\Productcommentary;
+use yii\web\Response;
+use app\models\Inventory;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -34,11 +36,11 @@ class ProductController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'update', 'view', 'delete', 'searchbycategory'],
+                'only' => ['index', 'create', 'update', 'view', 'delete', 'searchbycategory', 'productlist'],
                 'rules' => [
                     [
                         'allow' => Yii::$app->user->isGuest ? false : Yii::$app->user->identity->roleid == 1 ? true : false,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['create', 'update', 'delete', 'productlist'],
                         'roles' => ['@'],
                     ],
                     [
@@ -139,6 +141,9 @@ class ProductController extends Controller {
         $modelProductImage = new Productimage();
         $modelProductCommentary = new Productcommentary();
         $modelCategoryproducts = new Categoryproducts();
+        $inv = new Inventory();
+        $modelInventory = $inv->findModelByProduct($id);
+        $modelInventory = (empty($modelInventory))? $inv: $modelInventory;
 
         $pi = new Productimage();
         $banner = $pi->findImagesProduct($id, $this->findModel($id)->imagen);
@@ -162,6 +167,7 @@ class ProductController extends Controller {
                     'dataProviderCategory' => $dataProviderCategoryproducts,
                     'modelCategoryproducts' => $modelCategoryproducts,
                     'queryCategory' => $queryCategory,
+                    'modelInventory' => $modelInventory
         ]);
     }
 
@@ -266,6 +272,12 @@ class ProductController extends Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function actionProductlist($q = null, $id = null){
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new Product();
+        return $model->productList($q, $id);
     }
 
 }
