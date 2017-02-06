@@ -406,3 +406,15 @@ a.desc:after {
     text-decoration: none;
     color: white;
 }
+
+.inventory-totals{
+    font-size: 24px;
+    font-weight: bold;
+    color: #590B2D;
+}
+
+.item-agotado{
+    font-size: 40px;
+    color: #590B2D;
+    font-weight: bold;
+}

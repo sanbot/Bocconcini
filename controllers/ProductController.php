@@ -141,6 +141,8 @@ class ProductController extends Controller {
         $modelProductImage = new Productimage();
         $modelProductCommentary = new Productcommentary();
         $modelCategoryproducts = new Categoryproducts();
+        
+        $categorias = join(' ', $modelCategoryproducts->getCategoriesByProduct($id));
         $inv = new Inventory();
         $modelInventory = $inv->findModelByProduct($id);
         $modelInventory = (empty($modelInventory))? $inv: $modelInventory;
@@ -167,7 +169,8 @@ class ProductController extends Controller {
                     'dataProviderCategory' => $dataProviderCategoryproducts,
                     'modelCategoryproducts' => $modelCategoryproducts,
                     'queryCategory' => $queryCategory,
-                    'modelInventory' => $modelInventory
+                    'modelInventory' => $modelInventory,
+                    'categorias' => $categorias,
         ]);
     }
 

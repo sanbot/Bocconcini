@@ -9,6 +9,7 @@ use yii\grid\GridView;
 $this->title = 'Bocconcini | Admin';
 $PT = 'Inventario';
 $this->params['breadcrumbs'][] = $PT;
+$formatter = \Yii::$app->formatter;
 ?>
 <div class="inventory-index">
 
@@ -16,9 +17,18 @@ $this->params['breadcrumbs'][] = $PT;
 
     <p>
         <?= Html::a('Cambiar inventario de producto', ['create'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Descargar inventario', ['downloadinventory'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Plantilla Inventario', ['downloadinventorytemplate'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Plantilla Ventas', ['downloadsalestemplate'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Cargar inventario', ['uploadinventory'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Cargar Ventas', ['uploadsales'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Inventario Final', ['downloadinventory'], ['class' => 'btn btn-primary']) ?>
     </p>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="inventory-totals">Costo total: $ <?= $formatter->asDecimal($totalCost) ?> - Precio total: $ <?= $formatter->asDecimal($totalPrice) ?></p>
+        </div>
+    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -27,6 +37,10 @@ $this->params['breadcrumbs'][] = $PT;
             //'id',
             'product.name',
             'quantity',
+            'product.cost',
+            'totalCost',
+            'product.price',
+            'totalPrice',
             'observation',
 
             ['class' => 'yii\grid\ActionColumn'],

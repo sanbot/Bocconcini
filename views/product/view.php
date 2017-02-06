@@ -81,6 +81,7 @@ $formatter = \Yii::$app->formatter;
                             <p class="label-price">$ <?= $formatter->asDecimal($model->price) ?></p>
                         </div>
                     </div>
+                    <?php if($modelInventory->quantity <= 0){?> <div class="row"><div class="col-md-12"><p class="item-agotado">AGOTADO</p></div></div><?php }?>
                     <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->roleid == 1){ ?> 
                     <div class="row"><div class="col-md-12"><p class="item-label"><b>Código Único</b></p><p class="item-value"><?= $model->code?></p></div></div>
                     <div class="row"><div class="col-md-12"><p class="item-label"><b>Costo</b></p><p class="item-value">$ <?= $model->cost?></p></div></div>
@@ -92,7 +93,11 @@ $formatter = \Yii::$app->formatter;
                         'attributes' => [
                             //'id',
                             //'name',
-                            'productcategory.name',
+                            //'productcategory.name',
+                            [                      // the owner name of the model
+                                'label' => 'Categorias',
+                                'value' => $model->productcategory->name . (!empty($categorias) ? ' - '. $categorias : ''),
+                            ],
                             'description',
                         ],
                         'template' => '<div class="row"><div class="col-md-12"><p class="item-label"><b>{label}</b></p><p class="item-value">{value}</p></div></div>',

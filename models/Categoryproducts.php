@@ -62,4 +62,13 @@ class Categoryproducts extends \yii\db\ActiveRecord {
     public function listCategoryProducts($id){
         return Categoryproducts::find()->joinWith(['category', 'product'])->where(['tblproduct.id' => $id]);
     }
+    
+    public function getCategoriesByProduct($id){
+        return Categoryproducts::find()
+                ->addSelect('GROUP_CONCAT(tblproductcategory.name SEPARATOR  \' - \') as categoryname')
+                ->join('JOIN','tblproductcategory','tblproductcategory.id = tblcategoryproducts.categoryid')
+                ->where(['tblcategoryproducts.productid' => $id])
+                ->asArray()
+                ->one();
+    }
 }
