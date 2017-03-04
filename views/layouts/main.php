@@ -196,6 +196,37 @@ $cantpro = 1;
     ]);
     NavBar::end();
     ?>
+    
+    <a id="menu-toggle" href="#" class="btn btn-bocconcini btn-lg toggle"><i class="glyphicon glyphicon-gift"></i></a>
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-default btn-lg pull-right toggle"><i class="glyphicon glyphicon-remove"></i></a>
+            <li class="sidebar-brand">
+                Buscar mi Regalo
+            </li>
+            <li>
+                <label>¿Qué quiero regalar?</label>
+            </li>
+            <li>
+                <input type="text" name="description" placeholder="Palabras claves"/>
+            </li>
+            <li>
+                <input type="checkbox" name="male" /><a href="#"><i class="fa fa-mars" aria-hidden="true"></i></a>
+            </li>
+            <li>
+                <input type="checkbox" name="female" /><a href="#"><i class="fa fa-venus" aria-hidden="true"></i></a>
+            </li>
+            <!--<li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#about">About</a>
+            </li>
+            <li>
+                <a href="#contact">Contact</a>
+            </li>-->
+        </ul>
+    </div>
 
     <div class="container">
         <?= Breadcrumbs::widget([

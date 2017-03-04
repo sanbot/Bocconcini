@@ -115,15 +115,20 @@ class UsersController extends Controller {
         $queryRole = Role::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->password = md5($model->password);
-            $model->password_repeat = md5($model->password_repeat);
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                            'model' => $model,
-                            'queryRole' => $queryRole,
-                ]);
+            if(preg_match("/(?=^.{6,30}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $model->password)){
+                $model->password = md5($model->password);
+                $model->password_repeat = md5($model->password_repeat);
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    return $this->render('create', [
+                                'model' => $model,
+                                'queryRole' => $queryRole,
+                    ]);
+                }
+            }else{
+                Yii::$app->session->setFlash('match_password', 'La contraseña debe tener mínimo entre 8 y 30 caracteres. Debe tener mínimo una minúscyla, una mayúscula y un número o un simbolo.');
+                return $this->redirect(['create']);
             }
         } else {
             return $this->render('create', [
@@ -137,22 +142,27 @@ class UsersController extends Controller {
         $model = new Users();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->roleid = 2;
-            $password = $model->password;
-            $model->password = md5($model->password);
-            $model->password_repeat = md5($model->password_repeat);
-            if ($model->save()) {
-                $modelLogin = new LoginForm();
-                $modelLogin->username = $model->username;
-                $modelLogin->password = $password;
-                $modelLogin->login();
-                return $this->redirect(['site/index']);
-            } else {
-                $model->password = '';
-                $model->password_repeat = '';
-                return $this->render('singup', [
-                            'model' => $model,
-                ]);
+            if(preg_match("/(?=^.{6,30}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $model->password)){
+                $model->roleid = 2;
+                $password = $model->password;
+                $model->password = md5($model->password);
+                $model->password_repeat = md5($model->password_repeat);
+                if ($model->save()) {
+                    $modelLogin = new LoginForm();
+                    $modelLogin->username = $model->username;
+                    $modelLogin->password = $password;
+                    $modelLogin->login();
+                    return $this->redirect(['site/index']);
+                } else {
+                    $model->password = '';
+                    $model->password_repeat = '';
+                    return $this->render('singup', [
+                                'model' => $model,
+                    ]);
+                }
+            }else{
+                Yii::$app->session->setFlash('match_password', 'La contraseña debe tener mínimo entre 8 y 30 caracteres. Debe tener mínimo una minúscyla, una mayúscula y un número o un simbolo.');
+                return $this->redirect(['singup']);
             }
         } else {
             return $this->render('singup', [
@@ -172,16 +182,21 @@ class UsersController extends Controller {
         $queryRole = Role::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->password = md5($model->password);
-            $model->password_repeat = md5($model->password_repeat);
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                $model->password = '';
-                return $this->render('update', [
-                            'model' => $model,
-                            'queryRole' => $queryRole,
-                ]);
+            if(preg_match("/(?=^.{6,30}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $model->password)){
+                $model->password = md5($model->password);
+                $model->password_repeat = md5($model->password_repeat);
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    $model->password = '';
+                    return $this->render('update', [
+                                'model' => $model,
+                                'queryRole' => $queryRole,
+                    ]);
+                }
+            }else{
+                Yii::$app->session->setFlash('match_password', 'La contraseña debe tener mínimo entre 8 y 30 caracteres. Debe tener mínimo una minúscyla, una mayúscula y un número o un simbolo.');
+                return $this->redirect(['update']);
             }
         } else {
             $model->password = '';
@@ -221,16 +236,21 @@ class UsersController extends Controller {
         $model = $this->findModel(Yii::$app->user->identity->id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->password = md5($model->password);
-            $model->password_repeat = md5($model->password_repeat);
-            if ($model->save()) {
-                Yii::$app->session->setFlash('change_password', 'Se logró cambiar la contraseña.');
+            if(preg_match("/(?=^.{6,30}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $model->password)){
+                $model->password = md5($model->password);
+                $model->password_repeat = md5($model->password_repeat);
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('change_password', 'Se logró cambiar la contraseña.');
+                    return $this->redirect(['profile', 'id' => $model->id]);
+                } else {
+                    $model->password = '';
+                    return $this->render('updateprofile', [
+                                'model' => $model,
+                    ]);
+                }
+            }else{
+                Yii::$app->session->setFlash('change_password', 'La contraseña debe tener mínimo entre 8 y 30 caracteres. Debe tener mínimo una minúscyla, una mayúscula y un número o un simbolo.');
                 return $this->redirect(['profile', 'id' => $model->id]);
-            } else {
-                $model->password = '';
-                return $this->render('updateprofile', [
-                            'model' => $model,
-                ]);
             }
         } else {
             $model->password = '';

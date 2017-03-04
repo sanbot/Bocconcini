@@ -21,7 +21,13 @@ $this->params['breadcrumbs'][] = $PT;
     <h1><?= Html::encode($PT) ?></h1>
 
     <div class="users-form">
-
+        <div class="row">
+            <div class="col-md-12">
+                <?php if(Yii::$app->session->getFlash('match_password') != null){?>
+                <div class="alert alert-success"><?= Yii::$app->session->getFlash('match_password') ?></div>
+                <?php } ?>
+            </div>
+        </div>
         <?php $form = ActiveForm::begin(['action' => BaseUrl::base().'/index.php?r=users/singup']); ?>
         <div class="row">
             <div class="col-md-6">

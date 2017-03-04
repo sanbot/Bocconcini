@@ -10,7 +10,13 @@ use yii\helpers\ArrayHelper;
 ?>
 
 <div class="users-form">
-
+    <div class="row">
+        <div class="col-md-12">
+            <?php if(Yii::$app->session->getFlash('match_password') != null){?>
+            <div class="alert alert-success"><?= Yii::$app->session->getFlash('match_password') ?></div>
+            <?php } ?>
+        </div>
+    </div>
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-6">
